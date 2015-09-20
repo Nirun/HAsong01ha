@@ -1,0 +1,89 @@
+<?php
+?>
+<html>
+<head>
+    <title>
+        <?php echo setting::$WINDOW_TITLE?>
+    </title>
+    <meta content="text/html; charset=UTF-8" HTTP-EQUIV="CONTENT-TYPE">
+    <LINK REL="stylesheet" HREF="style.css" TYPE="text/css"> 
+</head>
+<body><br>
+<table   cellspacing="0" cellpadding="0"width="700" bgcolor="#FFFFFF"align="center">
+  <tr valign="top">
+    <td align="center">
+<table   border="0" cellspacing="0" cellpadding="0"width="700" bgcolor="#FFFFFF" align="center">
+  <tr>
+    <td align="left" width="131"><br><img src="images/logo.png" width="131" height="95" border="0" /></td>
+    <td align="left"><br><img src="images/newname.gif" width="433" height="44" border="0" /><br><img src="images/slogan.png" width="216" height="34" border="0" /></td>
+  </tr>
+</table>
+
+<form id="frm_search" method="get" action="<?php echo setting::$BASE_URL?>/search"
+      enctype="application/x-www-form-urlencoded"><img src="images/statustab.gif" width="681" height="77" border="0">
+  <table border="0" width="680"  cellspacing="0" cellpadding="0">
+         <tr bgcolor="#cafa85">
+            <td>&nbsp;&nbsp;ชื่อ</td>
+            <td><input type="text" id="fname" name="fname" placeholder="ชื่อ"></td>
+            <td>&nbsp;&nbsp;นามสกุล</td>
+            <td><input type="text" id="lname" name="lname" placeholder="นามสกุล"></td>
+            <td><input type="submit" value="search"></td>
+        </tr>
+    </table>
+</form>
+<table border="0" width="680"  bgcolor="#eaeaea"align="center">
+    <tr>
+        <td>No.</td>
+        <td>ชื่อ สกุล</td>
+        <td>หลักสูตร</td>
+        <td>สถานะ</td>
+        <td>เลขที่นั่ง</td>
+    </tr>
+    <?php
+    if ($data == false):
+        ?>
+        <tr>
+            <td colspan="4" align="center">&nbsp;</td>
+        </tr>
+        <?php else:
+        $row = 0;
+        foreach ($data as $key => $val):
+            $prefix = ($val['prefix_other'] != '') ? $val['prefix_other'] : $val['title_th'];
+            $fullName = $prefix . ' ' . $val['name'] . ' ' . $val['lastname'];
+            $fullCourse = $val['coursecode'] . ' ' . $val['coursename'];
+            $txtStatus = (intval($val['isPaid']) !== 1) ? 'waiting' : 'Paid';
+            $seat = $val['seatNo'];
+            $row++;
+            ?>
+            <tr valign="middle">
+                <td bgcolor="#FFFFFF" height="30">&nbsp;&nbsp;<?php echo $row .'.';?></td>
+                <td bgcolor="#FFFFFF" height="30">&nbsp;&nbsp;<?php echo $fullName;?></td>
+               <td bgcolor="#FFFFFF" height="30">&nbsp;&nbsp;<?php echo $fullCourse;?></td>
+                <td bgcolor="#FFFFFF" height="30">&nbsp;&nbsp;<?php echo $txtStatus;?></td>
+                <td bgcolor="#FFFFFF" height="30">&nbsp;&nbsp;<?php echo $seat;?></td>
+            </tr>
+            <?php
+        endforeach;
+    endif;
+    ?>
+</table>
+
+<br><br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" background="images/footer1.jpg">
+  <tr>
+ <td width="220"><img src="images/blank.gif" width="220" height="1" border="0" /></td>
+        <td class="copy" align="left"><br>&copy;&nbsp;
+
+            <strong>สถาบันรับรองคุณภาพสถานพยาบาล (องค์การมหาชน)</strong><br>The Healthcare Accreditation Institute (Public Organization)<br>
+            88/39 กระทรวงสาธารณสุข ซอย 6 อาคารสุขภาพแห่งชาติ ชั้น 5 ถ.ติวานนท์ <br>
+            ต.ตลาดขวัญ อ.เมือง จ.นนทบุรี 11000<br>
+            โทรศัพท์ 0-2832-9400 : โทรสาร 0-2832-9540<br>&nbsp;</td>
+  </tr>
+</table>
+
+</td>
+  </tr>
+</table>
+<br>&nbsp;&nbsp;
+</body>
+</html>

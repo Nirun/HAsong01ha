@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Untitled Document</title>
+        <style type="text/css">
+	.remark{
+			font-family: tahoma, Arial, sans-serif;
+	color: #ff0000;
+	font-size: 15px;
+	line-height: 18px; 
+	text-align: left;
+		}
+
+    </style>
+</head>
+
+<body><table width="800" border="0" cellspacing="0" cellpadding="0">
+    <tr valign="top">
+        <td align="left"><h2>ใบแจ้งรายการจ่ายเงิน</h2>
+            <!--logo--><table  border="0">
+                <tr valign="top">
+                    <td align="left" width="100"><img src="http://www.ha.or.th/newweb/images/logo.png" width="100" height="72" border="0"></td>
+                    <td align="left"><img src="http://www.ha.or.th/newweb/images/name.png" width="400" height="48" border="0"></td>
+                </tr>
+            </table><!--logo--></td>
+
+        <td style="width:10px;">&nbsp;</td>
+        <td align="center" style="font:12px Verdana, Geneva, sans-serif;"><h3>ส่วนของลูกค้า</h3>
+            วันที่ <!--dd--> เดือน <!--mm--> พศ <!--yy--></td>
+    </tr>
+    <tr valign="top">
+        <td align="left"><table width="600" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="center" style="font:12px Verdana, Geneva, sans-serif;">
+                    <table width="100%" border="0" cellspacing="2" cellpadding="2" style="font:12px Verdana, Geneva, sans-serif;border:1px solid #000;">
+                        <tr>
+                            <td width="120"> <strong>Company Code :</strong></td>
+                            <td align="left" width="500"><!--companycode--></td>
+                        </tr>
+                        <tr>
+                            <td align="left">&nbsp;<strong>ชื่อลูกค้า:</strong></td>
+                            <td align="left"><!--name--></td>
+                        </tr>
+                        <tr>
+                            <td align="left">&nbsp;<strong>Bill No./ Ref1:</strong></td>
+                            <td align="left"><!--ref1--></td>
+                        </tr>
+                        <tr>
+                            <td align="left">&nbsp;<strong>Ref2:</strong></td>
+                            <td align="left"><!--ref2--></td>
+                        </tr>
+                    </table></td>
+            </tr>
+        </table><br />
+
+            <table width="600" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="center" style="font:12px Verdana, Geneva, sans-serif;"><table width="100%" border="0" cellspacing="2" cellpadding="2" style="font:12px Verdana, Geneva, sans-serif;border:1px solid #000; ">
+                        <tr>
+                            <td width="250" align="right"><strong>จำนวนเงินที่ต้องชำระ</strong> / Amount :</td>
+                            <td align="left">--<!--amount-->-- บาท</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" align="center">(&nbsp;<!--txt_price-->&nbsp;)</td>
+                        </tr>
+                    </table></td>
+                </tr>
+            </table>
+
+        </td>
+
+        <td style="width:10px;">&nbsp;</td>
+
+        <td align="right"><table width="350" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="center" style="border:1px solid #000; font:12px Verdana, Geneva, sans-serif;">กรุณาชำระเงินภายใน  15 วัน<br />
+                    หลังจากการสำรองที่นั่ง ผ่านระบบonline  </td>
+            </tr>
+        </table></td>
+    </tr>
+
+
+    <tr valign="top">
+        <td align="left" colspan="3"><br />
+            <table width="100%" border="2" cellspacing="3" cellpadding="3" style="font:12px Verdana, Geneva, sans-serif;border:2px solid #000; ">
+                <tr valign="top">
+                    <td align="left" ><strong>รายการ</strong></td>
+                    <td  align="center" width="100"><strong>ค่าลงทะเบียน/ท่าน</strong><br /> (บาท)</td>
+                    <td align="center" width="100"><strong>จำนวนเงินรวม</strong><br /> (บาท)
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td align="left"><strong>ค่าใช้จ่ายสำหรับ</strong>  ค่าลงทะเบียน<br />
+                        <strong>หลักสูตร</strong>  <!--course_name--><br />
+                        <strong>ระหว่างวันที่</strong>  <!--period--><br />
+                        <strong>สถานที่จัดอบรม</strong>  <!--place--><br />
+                        <strong>จำนวนผู้เข้ารับการอบรม</strong> <!--sum_register--> ท่าน</td>
+                    <td align="right" valign="bottom"><!--price--></td>
+                    <td align="right" valign="bottom"><!--amount--></td>
+                </tr>
+                <tr valign="top">
+                    <td align="right" colspan="2"><strong>รวมเป็นเงินทั้งสิ้น</strong> </td>
+                    <td align="right" valign="bottom" bgcolor="#e8e8e8"><!--amount--></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr valign="top">
+                    <td align="left" style="font:10px Verdana, Geneva, sans-serif;">หมายเหตุ : สถาบันได้รับการยกเว้นหักภาษี ณ ที่จ่าย</td>
+                    <td align="right" style="font:11px Verdana, Geneva, sans-serif;">ผู้ออกใบแจ้งรายการจ่ายเงิน<br />
+                        <img src="http://www.haregister.com/template_email/sign.gif" width="120" height="72" border="0" /></td>
+                </tr>
+            </table>
+            <img src="http://www.haregister.com/template_email/cut.gif" width="800" height="22" border="0" /></td>
+    </tr>
+</table>
+
+
+
+<table width="800" border="0" cellspacing="0" cellpadding="0">
+    <tr valign="top">
+        <td align="left">
+            <!--logo--><table  border="0">
+            <tr valign="top">
+                <td align="left" width="100"><img src="http://www.ha.or.th/newweb/images/logo.png" width="100" height="72" border="0"></td>
+                <td align="left"><img src="http://www.ha.or.th/newweb/images/name.png" width="400" height="48" border="0"></td>
+            </tr>
+        </table><!--logo--></td>
+
+        <td style="width:10px;">&nbsp;</td>
+        <td align="center" style="font:12px Verdana, Geneva, sans-serif;"><h3>ส่วนของธนาคาร</h3>
+            วันที่ <!--dd--> เดือน <!--mm--> พศ <!--yy--></td>
+    </tr>
+    <tr valign="top">
+        <td align="left"><table width="600" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="center" style="font:12px Verdana, Geneva, sans-serif;">
+                    <table width="100%" border="0" cellspacing="2" cellpadding="2" style="font:12px Verdana, Geneva, sans-serif;border:1px solid #000;">
+                        <tr>
+                            <td width="120"> <strong>Company Code :</strong></td>
+                            <td width="500" align="left"><!--companycode--></td>
+                        </tr>
+                        <tr>
+                            <td align="left">&nbsp;<strong>ชื่อลูกค้า:</strong></td>
+                            <td align="left"><!--name--></td>
+                        </tr>
+                        <tr>
+                            <td align="left">&nbsp;<strong>Bill No./ Ref1:</strong></td>
+                            <td align="left"><!--ref1--></td>
+                        </tr>
+                        <tr>
+                            <td align="left">&nbsp;<strong>Ref2:</strong></td>
+                            <td align="left"><!--ref2--></td>
+                        </tr>
+                    </table></td>
+            </tr>
+        </table><br />
+
+            <table width="600" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="center" style="font:12px Verdana, Geneva, sans-serif;"><table width="100%" border="0" cellspacing="2" cellpadding="2" style="font:12px Verdana, Geneva, sans-serif;border:1px solid #000; ">
+                        <tr>
+                            <td width="250"  align="right"><strong>จำนวนเงินที่ต้องชำระ</strong> / Amount :</td>
+                            <td align="left">--<!--amount-->-- บาท</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" align="center">(&nbsp;<!--txt_price-->&nbsp;)</td>
+                        </tr>
+                    </table></td>
+                </tr>
+            </table>
+
+        </td>
+
+        <td style="width:10px;">&nbsp;</td>
+
+        <td align="right"><table width="350" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td align="center" style="border:1px solid #000; font:12px Verdana, Geneva, sans-serif;">กรุณาชำระเงินภายใน  15 วัน<br />
+                    หลังจากการสำรองที่นั่ง ผ่านระบบonline</td>
+            </tr>
+        </table></td>
+    </tr>
+
+
+    <tr valign="top">
+        <td align="left" colspan="3"><br />
+
+            <table  border="0" cellspacing="0" cellpadding="0">
+                <tr valign="top">
+                    <td align="left" style="font:12px Verdana, Geneva, sans-serif;">กรุณากรอกเอกสารนี้ให้ครบถ้วน แล้วนำไปชำระได้ที่เคาน์เตอร์ธนาคารกรุงไทย ทุกสาขา หรือชำระเงินผ่านตู้  ATM  ธนาคารกรุงไทย </td>
+                    <td align="right"  width="124"><img src="http://www.haregister.com/template_email/ktb.gif"  width="160" border="0" /></td>
+                </tr>
+            </table><br />
+
+            <table width="100%" border="2" cellspacing="3" cellpadding="3" style="font:12px Verdana, Geneva, sans-serif;border:2px solid #000; ">
+                <tr valign="top">
+                    <td align="left" >&nbsp;&nbsp;<strong>สาขา ธนาคารกรุงไทยที่รับฝาก </strong><br />
+                        &nbsp;&nbsp;</td>
+                    <td align="left"  width="300">&nbsp;&nbsp;<strong>  วันที่ชำระเงิน</strong><br />
+                        &nbsp;&nbsp;</td>
+                </tr>
+                <tr valign="top">
+                    <td align="left">&nbsp;&nbsp;<strong>เงินสด</strong> / Cash <br />
+                        &nbsp;&nbsp;</td>
+                    <td  align="left">&nbsp;&nbsp;<strong> จำนวนเงิน</strong> / Amount <br />
+                        &nbsp;&nbsp;</td>
+                </tr>
+                <tr valign="top">
+                    <td align="left"><table width="100%" border="1" cellspacing="0" cellpadding="0" style="font:12px Verdana, Geneva, sans-serif;">
+                        <tr valign="top">
+                            <td align="left">&nbsp;<strong>เลขที่เช็ค</strong> / Chq No. <br />
+                                &nbsp;&nbsp;</td>
+                            <td align="left">&nbsp;<strong>ธนาคาร / สาขา </strong>Bank/Branch <br />
+                                &nbsp;&nbsp;</td>
+                            <td align="left">&nbsp;<strong>เช็คลงวันที่ /</strong> Chq Due Date<br />
+                                &nbsp;&nbsp; </td>
+                        </tr>
+                    </table>
+                    </td>
+                    <td  align="left">&nbsp;&nbsp;<strong> จำนวนเงิน</strong> / Amount <br />
+                        &nbsp;&nbsp;</td>
+                </tr>
+
+                <tr valign="top">
+                    <td align="left">&nbsp;&nbsp;<strong>ยอดรวม จำนวนเงินที่ชำระ </strong>/ Total Payment (ตัวอักษร) <br />
+                        &nbsp;&nbsp;</td>
+                    <td  align="left">&nbsp;&nbsp;<strong> จำนวนเงิน</strong> / Amount <br />
+                        &nbsp;&nbsp;</td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+
+
+</table>
+<br />
+&nbsp;&nbsp;
+</body>
+</html>

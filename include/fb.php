@@ -1,0 +1,1 @@
+<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.ha.or.th&amp;send=false&amp;layout=standard&amp;width=450&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=tahoma&amp;height=35&amp;appId=437414566279671" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:30px;" allowTransparency="true"></iframe>

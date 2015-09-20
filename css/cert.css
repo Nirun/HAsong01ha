@@ -1,0 +1,53 @@
+@font-face {
+    font-family: "sarabun";
+    src: url('/font/sarabun.eot');
+    src: url('/font/sarabun.eot?iefix') format('eot'), url('/font/sarabun.woff') format('woff'), url('/font/sarabun.ttf') format('truetype'), url('/font/sarabun.svg') format('svg');
+
+}
+#wrapper-tp {
+    width: 1000px;
+    height: 600px;
+    /*height:auto;*/
+    /*position: absolute;*/
+}
+
+#container-tp {
+    width:755px;
+    height:566px;
+    background-image:url(../certificate.jpg);
+    background-repeat:no-repeat;
+    position: relative;
+
+}
+
+#action {
+    position: relative;
+    margin-left: 10px;
+    /*border: #000 1px solid;*/
+    width: 200px;
+    height: 400px;
+    float: left;
+    font: 14px  Tahoma, Geneva, sans-serif;
+}
+
+#draggable3, #draggable4, #draggable5, #draggable6,#draggable7{
+    cursor: pointer;
+}
+
+#msg {
+    display: none;
+    margin-top: 10px;
+    float: left;
+    position: relative;
+}
+
+.wrapper-slide {
+    text-align: center;
+    padding: 3px;
+    display: inline-block;
+
+}
+
+#btn_copy {
+    padding: 3px;
+}

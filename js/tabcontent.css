@@ -1,0 +1,76 @@
+/* ######### CSS for Shade Tabs. Remove if not using ######### */
+
+.shadetabs{
+	padding: 0px 0;
+	margin-left: 0;
+	margin-top: 0px;
+	margin-bottom: -5px;
+	font: bold 12px Verdana;
+	list-style-type: none;
+	text-align: left; /*set to left, center, or right to align the menu as desired*/
+}
+
+.shadetabs li{
+display: inline;
+margin-top: 0px;
+margin-bottom: 0;
+}
+
+.shadetabs li a{
+text-decoration: none;
+position: relative;
+margin-top: 0px;
+margin-bottom: 0;
+border: 0px;
+}
+
+.shadetabs li a:visited{
+color: #a89e8b;
+margin-top: 0px;
+margin-bottom: 0;
+border: 0px;
+}
+
+.shadetabs li a:hover{
+color: #a89e8b;
+margin-top: 0px;
+margin-bottom: 0;
+border: 0px;
+}
+
+.shadetabs li a.selected{ /*selected main tab style */
+position: relative;
+
+margin-top: 0px;
+margin-bottom: 0;
+border: 0px;
+}
+
+.shadetabs li a.selected{ /*selected main tab style */
+
+margin-top: 0px;
+margin-bottom: 0;
+border: 0px;
+}
+
+.shadetabs li a.selected:hover{ /*selected main tab style */
+text-decoration: none;
+}
+
+.tabcontent{
+margin-top: 0px;
+margin-bottom: 0;
+border: 0px;
+	background-image: url(bgtab.jpg);
+	background-repeat: no-repeat;
+	background-position:top;
+	height: 210px;
+	width:560px;
+}
+
+@media print {
+.tabcontent {
+margin-top: 0px;
+display:block !important;
+}
+

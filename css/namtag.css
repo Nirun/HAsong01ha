@@ -1,0 +1,57 @@
+#wrapper-tp {
+    background-color: #FFFFFF;
+    height:380px;
+    /*margin-left: 50px;*/
+    /*position: absolute;*/
+}
+
+#container-tp {
+    border: #000 1px solid;
+    width: 340px;
+    height: 207px;
+    float: left;
+    text-align: left!important;
+    position: relative;
+    background-repeat: no-repeat;
+    background-image: url(/bgcard1.jpg);
+    background-position: right;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: transparent;
+}
+
+#incard {
+    padding-left: 10px;
+}
+
+#action {
+    position: relative;
+    margin-left: 50px;
+    width: 300px;
+    height: 400px;
+    float: left;
+    font: 12px Tahoma;
+}
+
+#draggable3, #draggable4, #draggable5, #draggable6, #draggable7 {
+    /*display: inline-flex;*/
+    cursor: pointer;
+}
+
+#msg {
+    display: none;
+    margin-top: 10px;
+    float: left;
+    position: relative;
+}
+
+.wrapper-slide {
+    text-align: center;
+    padding: 3px;
+    display: inline-block;
+
+}
+
+#btn_copy {
+    padding: 3px;
+}

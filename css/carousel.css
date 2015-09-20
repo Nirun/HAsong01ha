@@ -1,0 +1,52 @@
+div.bgcarousel{ /* CSS for main carousel container */
+    /*opacity:0.8;*/
+    background:  url(../ajaxload.gif) center center no-repeat; /* loading gif while caoursel is loading */
+    width:550px; /* default dimensions of carousel */
+    height:400px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.navbutton{ /* CSS for the nav buttons */
+    margin:5px;
+    opacity:0.9;
+    margin-top: 110px;
+}
+
+div.slide{ /* CSS for each image's DIV container within main container */
+    background-color: #;
+    background-position: center center; /* center image within carousel */
+    background-repeat: no-repeat;
+    background-size: cover; /* CSS3 property to scale image within container? "cover" or "contain" */
+    color: black;
+}
+
+div.selectedslide{ /* CSS for currently selected slide */
+}
+
+div.slide div.desc{ /* DIV that contains the textual description inside .slide */
+    position: absolute;
+    color: black;
+    left: 40px;
+    top: 280px;
+    width:460px;
+    padding: 10px;
+    font: bold 14px sans-serif, Arial;
+    text-shadow: 0 -1px 1px #8a8a8a; /* CSS3 text shadow */
+    z-index:5;
+    text-align: left;
+}
+
+div.selectedslide div.desc{ /* CSS for currently selected slide's desc div */
+}
+
+div.slide div.desc h2{
+    font-size:150%;
+    margin:0;
+}
+
+div.slide div.desc a{
+    color:yellow;
+    text-decoration:none;
+}

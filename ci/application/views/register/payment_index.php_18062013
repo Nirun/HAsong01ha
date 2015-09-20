@@ -1,0 +1,304 @@
+<div id="container"><font class="title">สถานะการชำระเงิน</font>
+<!--search-->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td align="right">
+            <!--search-->
+            <form name="frm" method="get" enctype="application/x-www-form-urlencoded" id="frm" action="<?php echo setting::$BASE_URL;?>/register/payment/index/1/">
+                <font class="bottomtext">ค้นหาหลักสูตร</font><br>
+                <table cellspacing="2" cellpadding="2" border="0">
+                    <tr valign="middle">
+                        <td align="right" class="info">รหัสหลักสูตร</td>
+                        <td align="left" colspan="3">&nbsp;
+                            <select name="course"  style="  width: 200px;  border-top:1px solid #BEC4DC; border-left:1px solid #BEC4DC; border-right:1px solid #7984B6; border-bottom:1px solid #9197B5; background:#ffffff;   padding-top:1px; padding-bottom:1px; margin-top:2px; margin-bottom:2px;">
+                                <option value="" selected="selected">เลือกรหัสหลักสูตร</option>
+                                <?php
+                                foreach ($course_list as $key => $valC):
+                                    $c_name = $valC['coursecode']. ':'.' รุ่น '.$valC['generation'];
+                                    ?>
+                                    <!-- <option value="--><?php //echo $valC['coursecode']?><!--">--><?php //echo $c_name?><!--</option>-->
+                                    <option value="<?php echo $valC['courseID']?>"><?php echo $c_name?></option>
+
+                                    <?php
+                                endforeach;
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr valign="middle">
+                        <td align="right" class="info">เดือนที่มีการอบรม</td>
+                        <td align="left" colspan="3">&nbsp;
+                            <?php
+                            $thaimonth = array("มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+                                "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+                                "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
+                            //var_dump($thaimonth);
+                            $cMonth = count($thaimonth);
+                            //echo $cMonth;
+                            ?>
+                            <select name="month"  style="width: 150px;  border-top:1px solid #BEC4DC; border-left:1px solid
+#BEC4DC; border-right:1px solid #7984B6; border-bottom:1px solid #9197B5; background:#ffffff;   padding-top:1px; padding-bottom:1px;
+margin-top:2px; margin-bottom:2px;">
+                                <option value="0">.:: เลือก ::.</option>
+                                <?php
+                                $i = 1;
+                                foreach ($thaimonth as $month) {
+                                    echo '<option value="' . $i . '">' . $month . '</option>';
+                                    $i++;
+                                }
+                                ?>
+                            </select>
+                            <?php
+                            $cYear = date('Y')+543;
+                            $sYear = $cYear -10;
+                            //echo $cYear;
+                            ?>
+                            <select name="year" style="width: 70px;  border-top:1px solid #BEC4DC; border-left:1px solid
+#BEC4DC; border-right:1px solid #7984B6; border-bottom:1px solid #9197B5; background:#ffffff;   padding-top:1px; padding-bottom:1px;
+margin-top:2px; margin-bottom:2px;">
+                                <option value="0">.:: ปี ::.</option>
+                                <?php foreach (range ($sYear, $cYear) as $val) { ?>
+                                <option value="<?=$val?>"><?=$val?></option>
+                                <?php } ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr valign="middle">
+                        <td align="right" class="info"></td>
+                        <td align="right" colspan="3">
+                            Billing Ref1:&nbsp;<input name="ref1" id="ref1" style="width: 120px;  border-top:1px solid #BEC4DC; border-left:1px solid #BEC4DC; border-right:1px solid #7984B6; border-bottom:1px solid #9197B5; background:#ffffff;   padding-top:1px; padding-bottom:1px; margin-top:3px; margin-bottom:3px;cursor: text;">
+                        </td>
+                    </tr>
+                    <tr valign="middle">
+                        <td align="right" class="info"></td>
+                        <td align="right" colspan="3">
+                            Billing Ref2:&nbsp;<input name="ref2" id="ref2" style="width: 120px;  border-top:1px solid #BEC4DC; border-left:1px solid #BEC4DC; border-right:1px solid #7984B6; border-bottom:1px solid #9197B5; background:#ffffff;   padding-top:1px; padding-bottom:1px; margin-top:3px; margin-bottom:3px;cursor: text;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">&nbsp;</td>
+                        <td align="right">
+                            <input type="submit" value="ค้นหา" class="button">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <!--search--><br />
+<!--<a href="http://www.haregister.com/register/reports/paid" target="_blank"><strong>Report :</strong>รายละเอียดออกใบเสร็จ</a>-->
+        </td>
+    </tr>
+</table>
+
+<?php
+//echo count($data) . "<br>";
+
+$index = count($data);
+
+for ($i = 0; $i < $index; $i++) {
+    //echo "The layer number $i" . "<br>";
+
+    //optianal
+    $optlist = "";
+    foreach ($data[$i]["optional"] as $_optional):
+        $optlist .= $_optional['optional'] . " ";
+    endforeach;
+
+    //count
+    $cntRegister = $data[$i]["cntreg"];
+    $cntPaid = $data[$i]["cntpaid"];
+
+    foreach ($data[$i]["course"] as $val):
+        //echo $val['courseID']. "<br>";
+        $sDate = $val['startdate'];
+        $eDate = $val['enddate'];
+        $ResDate = $val['registstartdate'];
+        $ReeDate = $val['registenddate'];
+
+        if ($sDate == "0000-00-00 00:00:00" or $sDate == "0000-00-00" or $sDate == ""
+            or $eDate == "0000-00-00 00:00:00" or $eDate == "0000-00-00" or $eDate == ""
+            or $ResDate == "0000-00-00 00:00:00" or $ResDate == "0000-00-00" or $ResDate == ""
+            or $ReeDate == "0000-00-00 00:00:00" or $ReeDate == "0000-00-00" or $ReeDate == ""
+        ) {
+            $CourseDate = "ไม่ได้ระบุวันที่อบรม";
+            $RegisterDate = "ไม่ได้ระบุวันที่อบรม";
+        } else {
+
+            //Course Date
+            $scDate = Thaidate::date($sDate, "DD MM YYYY");
+            $ecDate = Thaidate::date($eDate, "DD MM YYYY");
+            $CourseDate = $scDate . '-' . $ecDate;
+
+            //Registration Date
+            $rsDate = Thaidate::date($ResDate, "DD MM YYYY");
+            $reDate = Thaidate::date($ReeDate, "DD MM YYYY");
+            $RegisterDate = $rsDate . ' - ' . $reDate;
+        }
+            $limit = $val['limittrainees'];
+        ?>
+    <div id="space"></div>
+    <div class="hr dotted"><br/></div><br>
+<div>
+    <font class="bottomtext"><strong><?php echo $val['coursecode'] . ":" . $val['coursename']; ?></strong><br/>
+        รายละเอียดการอบรม</font><br/>
+        <strong>ระยะเวลาการอบรม</strong>
+        <?php echo $CourseDate; ?>
+        <br/>
+        <strong>วันที่รับสมัคร</strong>
+        <?php echo $RegisterDate; ?><br/>
+        <strong>วิทยากร</strong>
+        <?php echo $val['speaker']; ?>
+        <br/>
+        <strong>สถานที่ </strong>
+        <?php echo $val['place']; ?>
+        <br/>
+        <strong>ค่าลงทะเบียน</strong>
+        <?php echo $val['price']; ?> บาท ( <?php echo $optlist; ?>)
+        <br/>
+        <strong>จำนวนผู้ลงทะเบียน</strong>
+        <?php echo $cntRegister ?> คน  <br/>
+        <strong>จำนวนผู้จ่ายเงินแล้ว</strong>
+        <?php echo $cntPaid; ?> คน<br />
+<br />
+    <font class="bottomtext">รายชื่อคนที่สมัครใน course นี้ (กรณี เป็นบุคคลที่ผู้อื่นสมัครให้ รายชื่อผู้นั้นจะอยู่ภายใต้ ชื่อคนที่สมัครให้) </font>
+
+        <table border="0" cellspacing="2" cellpadding="2">
+        <tr valign="middle">
+            <td align="left" width="3"><img src="images/blank.gif" alt="" width="3" height="5" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="150" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="120" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="100" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="60" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="80" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="80" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="80" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="80" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="30" height="1" border="0"></td>
+            <td align="left"><img src="images/blank.gif" alt="" width="60" height="1" border="0"></td>
+        </tr>
+        <tr valign="middle" bgcolor="#a0cdf9">
+            <td align="center" height="30"><p class="fronttext">ลำดับ</p> </td>
+            <td align="center" height="30"><p class="fronttext">ชื่อ / นามสกุล </p> </td>
+            <td align="center" height="30"><p class="fronttext">รพ.</p> </td>
+            <td align="center" height="30"><p class="fronttext">ประเภท<br>การสมัคร </p> </td>
+            <td align="center" height="30"><p class="fronttext">จำนวน<br>สมัคร </p> </td>
+            <td align="center" height="30"><p class="fronttext">วันที่สมัคร</p> </td>
+            <td align="center" height="30"><p class="fronttext">สถานะ</p> </td>
+            <td align="center" height="30"><p class="fronttext">วันที่<br>ชำระเงิน</p> </td>
+            <td align="center" height="30"><p class="fronttext">การชำระเงิน </p> </td>
+            <td align="center" height="30"><p class="fronttext">ดูรายละเอียด</p> </td>
+        </tr>
+        <?php
+        $j = 1;
+        foreach ($data[$i]["reg"] as $reg):
+            if ($val['courseID'] == $reg['courseID']) {
+
+                //register type
+                $regTypeID = $reg['registerby'];
+                $regType = $reg['type_name'];
+
+                //prefix
+                if ($reg['prefix'] == 6) {
+                    $prefix = $reg['prefix_other'];
+                } else {
+                    $prefix = $reg['title_th'];
+                }
+
+                //trainee ID
+                $traineeID = $reg['traineeID'];
+
+                //trainee name
+                $trainee = $prefix . " " . $reg['name'] . " " . $reg['lastname'];
+
+                //hospital name
+                if ($reg['hospitalother'] != "") {
+                    $hospital = $reg['hospitalother'];
+                } else {
+                    if (!is_null($reg['hospitalname'])){
+                        $hospital = "รพ." . $reg['hospitalname'] . " " . $reg['province'];
+                    }else{
+                        $hospital = "";
+                    }
+                }
+
+                //register date
+                $regDate = $reg['registerdatetime'];
+                if ($regDate == "0000-00-00 00:00:00" or $regDate == "0000-00-00" or $regDate == "") {
+                    $registeredDate = "ยังไม่ได้ลงทะเบียน";
+                } else {
+                    $registeredDate = Thaidate::date($regDate, "DD MM YY");
+                }
+
+                //Payment
+                if($reg['IsPaid'] == 1 ){
+                    //payment date
+                    $pDate = $reg['receipt_date'];
+                    if ($pDate == "0000-00-00 00:00:00" or $pDate == "0000-00-00" or $pDate == "") {
+                        //$paiddate = "รอชำระเงิน";
+                        $paiddate = "-";
+                    } else {
+                        $paiddate = Thaidate::date($pDate, "DD MM YY");
+                    }
+                }else {
+                    //$paiddate = "รอชำระเงิน";
+                    $paiddate = "-";
+                }
+
+                //Status
+                if($reg['IsPaid'] == 1 ){
+                    $status = "ชำระเงินแล้ว";
+                }else if ($reg['IsPaid'] == 2 || $reg['IsPaid'] == 0){
+                    $status = "รอการชำระ";
+                }else if ($reg['IsPaid'] == 4 ){
+                    $status = "รอที่นั่งว่าง";
+                }
+
+                //Over Due
+                if($reg['dateOver'] > 15 ){
+                    $bgcolor = "background-color:red";
+                }else{
+                    $bgcolor = "background-color:white";
+                }
+
+                ?>
+                <!--course details-->
+                <tr valign="middle" style="<?php echo $bgcolor; ?>">
+                    <td align="center" class="info"><?php echo $j; ?></td>
+                    <td align="left" class="info"><?php echo $trainee; ?></td>
+                    <td align="left" class="info"><?php echo $hospital; ?></td>
+                    <td align="left" class="info"><?php echo $regType; ?></td>
+                    <td align="center" class="info"><?php echo $reg['member']; ?></td>
+                    <td align="center" class="info"><?php echo $registeredDate; ?></td>
+                    <td align="center" class="info"><?php echo $status; ?></td>
+                    <td align="center" class="info"><?php echo $paiddate; ?></td>
+                    <?php if($reg['IsPaid'] == 1 ){ ?>
+                    <td align="left" class="tab">
+                        <a href="register/payment/PaymentReceipt/view/<?php echo $traineeID;?>/<?php echo $reg['courseID'];?>/<?php echo $reg['refID'];?>/<?php echo $regTypeID;?>/<?php echo strlen($limit);?>/<?php echo $reg['registrationID'];?>?height=500&width=450" class="thickbox" rel="thickbox_slide1">
+                            <img src="<?php echo setting::$BASE_URL; ?>/register/images/billdetails.gif" width="117" height="21" border="0" />
+                        </a>
+                    </td>
+                    <?php }else if ($reg['IsPaid'] == 2 || $reg['IsPaid'] == 0 || $reg['IsPaid'] == 4){?>
+                    <td align="left" class="info">
+                        <a href="register/payment/PaymentReceipt/add/<?php echo $traineeID;?>/<?php echo $reg['courseID'];?>/<?php echo $reg['refID'];?>/<?php echo $regTypeID;?>/<?php echo strlen($limit);?>/<?php echo $reg['registrationID'];?>?height=500&width=450" class="thickbox" rel="thickbox_slide1">
+                            <img src="<?php echo setting::$BASE_URL; ?>/register/images/addpayment.gif" width="117" height="21" border="0" />
+                        </a>
+                    </td>
+                    <?php }?>
+                    <td align="left" class="info">
+                        <a href="register/course/traineedetails/<?php echo $traineeID;?>?height=550&width=980" class="thickbox" rel="thickbox_slide1">
+                            <img src="<?php echo setting::$BASE_URL; ?>/register/images/view.gif" width="92" height="21" border="0" />
+                        </a>
+                    </td>
+                </tr>
+                <!--course details-->
+                <?php
+                $j++;
+            }
+
+        endforeach;
+            ?>
+        </table>
+<?php
+    endforeach;
+}
+?>
+</div>

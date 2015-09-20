@@ -1,0 +1,190 @@
+$(document).ready(function () {
+    $('#reserve').click(function () {
+        var couseID = $(this).attr('rel');
+        $.ajax({
+            url:'member/popup_reserve/',
+            type:'POST',
+            cache:false,
+            data:{'courseID':couseID},
+            beforeSend:function () {
+                $.fancybox.showLoading();
+            },
+            success:function (data) {
+                $.fancybox({
+                    type:'html',
+                    minWidth:910,
+                    minHeight:600,
+                    content:data
+                });
+            },
+            complete:function () {
+                $.fancybox.hideLoading();
+            }
+        })
+    });
+
+    $('#payment').live('click', function () {
+        var couseID = $(this).attr('rel');
+
+        $.ajax({
+            url:'member/register/exists',
+            type:'POST',
+            cache:false,
+            data:$('#frm_reserve').serialize(),
+            dataType:'json',
+            async:false,
+            success:function (data) {
+                setdata(data);
+            }
+        })
+        if (json_data.user_exists == true) {
+            alert(json_data.msg);
+            return false;
+        }
+        else {
+            $.ajax({
+                url:'member/popup_payment/' + couseID,
+                type:'POST',
+                cache:false,
+                data:$('#frm_reserve').serialize(),
+                beforeSend:function () {
+                    $.fancybox.showLoading();
+                },
+                success:function (data) {
+                    $.fancybox({
+                        type:'html',
+                        autoSize:true,
+                        scrolling:'no',
+                        //width:400,
+                        //height:200,
+                        content:data
+                    });
+                },
+                complete:function () {
+                    $.fancybox.hideLoading();
+                }
+            })
+        }
+    });
+    $('.payment2').click(function () {
+        var val = $(this).attr('rel');
+        var val = val.split(',');
+        var couseID = val[0];
+        var registerID = val[1];
+        $.ajax({
+            url:'member/popup_payment/' + couseID,
+            type:'POST',
+            cache:false,
+            data:{'registerID':registerID},
+            beforeSend:function () {
+                $.fancybox.showLoading();
+            },
+            success:function (data) {
+                $.fancybox({
+                    type:'html',
+                    autoSize:true,
+                    scrolling:'no',
+                    //width:400,
+                    //height:200,
+                    content:data
+                });
+            },
+            complete:function () {
+                $.fancybox.hideLoading();
+            }
+        })
+    });
+
+    var json_data = {};
+    setdata = function (data) {
+        json_data = data;
+        // console.log(json_data);
+    }
+    $('#btn_reserve').live('click', function () {
+        $.ajax({
+            url:'member/register/exists',
+            type:'POST',
+            cache:false,
+            data:$('#frm_reserve').serialize(),
+            dataType:'json',
+            async:false,
+            success:function (data) {
+                setdata(data);
+            }
+        })
+
+        if (json_data.user_exists == true) {
+            alert(json_data.msg);
+            return false;
+        }
+        else {
+            return true;
+        }
+        return false;
+    });
+    $('input[name="registerBy"]').live('change', function () {
+        if ($(this).val() == 1) {
+            $('input.info_enable').val('');
+            $('select.info_enable').val('1');
+            $('.info_enable').attr('disabled', 'disabled');
+        }
+        else {
+            $('.info_enable').removeAttr('disabled', 'disabled');
+        }
+    });
+    $('.change-name').live('click', function () {
+        var registrationID = $(this).attr('title');
+        $.ajax({
+            url:'member/change/',
+            type:'POST',
+            cache:false,
+            data:{'registerID':registrationID},
+            beforeSend:function () {
+                $.fancybox.showLoading();
+            },
+            success:function (data) {
+                $.fancybox({
+                    type:'html',
+                    autoSize:true,
+                    scrolling:'no',
+                    //width:400,
+                    //height:200,
+                    content:data
+                });
+            },
+            complete:function () {
+                $.fancybox.hideLoading();
+            }
+        })
+        return false;
+
+    });
+    $('input[name="submit-change"]').live('click', function () {
+        $(this).attr('value',' กำลังบันทึก ')
+        $(this).attr('disabled','disabled')
+        $.ajax({
+            url:'member/change_save/',
+            type:'POST',
+            cache:false,
+            data:$('#form-change').serialize(),
+            beforeSend:function () {
+                $.fancybox.showLoading();
+            },
+            success:function (data) {
+                $.fancybox({
+                    type:'html',
+                    autoSize:false,
+                    //scrolling:'no',
+                   width:400,
+                   height:200,
+                    content:data
+                });
+            },
+            complete:function () {
+                $.fancybox.hideLoading();
+
+            }
+        })
+        return false;
+    });
+});
