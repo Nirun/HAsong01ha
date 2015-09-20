@@ -102,6 +102,13 @@ class Course extends CI_Controller
 
         //load template
         $this->template->set_template('admin');
+        //position
+        $position = $this->course_m->getPosition();
+        $data['position'] = $position;
+
+//var_dump($data['position']); exit;
+
+
 
         //popup
         $this->template->add_css('js/source/jquery.fancybox.css');

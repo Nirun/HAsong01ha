@@ -1246,5 +1246,9 @@ class Course_m extends CI_Model
         $res = $this->db->update('tbl_registration', $data);
     }
 
+    function getPosition(){
+        $data = $this->db->get('tbl_position');
+        return $data->result_array();
+    }
 }
 

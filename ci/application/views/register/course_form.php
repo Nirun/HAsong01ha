@@ -128,6 +128,26 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="info">
+                          <p>
+                              เลือกให้อบรมเฉพาะวิชาชีพ
+                            </p>
+                            <ul class="course-position" style="list-style: none;width: 350px;margin-top: 20px">
+
+                                <?php
+                                    foreach($position as $k=>$v){
+                                       ?>
+                                    <li style="float: left;width: 175px">
+                                        <input id="pos_<?=$v['positionID']?>" type="checkbox" name="position" value="<?=$v['positionID']?>">
+                                        <label for="os_<?=$v['positionID']?>"><?=$v['position']?></label>
+                                    </li>
+                                <?php
+                                    }
+                                ?>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2" height="80px" valign="top">
                             <div id="courselist" class="info"></div>
                             <input type="hidden" id="precourseID" name="precourseID">
