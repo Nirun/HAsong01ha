@@ -24,21 +24,20 @@ class Course extends CI_Controller
         $courseID = 0;
 
         $this->course_m->context['limit'] = $limit;
-       // $this->course_m->context['page'] = $page;
+        // $this->course_m->context['page'] = $page;
         $this->course_m->context['page'] = $offset;
 
         $this->course_m->context['filter'] = $_GET;
         $qry = "";
-        if (!empty($_GET)){
+        if (!empty($_GET)) {
             if (//!isset($_GET['course']) && trim($_GET['course']) == '' &&
                 isset($_GET['course']) && trim($_GET['course']) == '' &&
                 isset($_GET['month']) && trim($_GET['month']) == 0 &&
                 isset($_GET['year']) && trim($_GET['year']) == 0 &&
                 isset($_GET['status']) && trim($_GET['status']) == 0
-               )
-            {
+            ) {
                 $coursecode = '';
-                $this->course_m->context['courseID']= $courseID;
+                $this->course_m->context['courseID'] = $courseID;
                 $res = $this->course_m->getCourseList(true);
             } else {
                 //$coursecode = trim($_GET['course']);
@@ -50,22 +49,22 @@ class Course extends CI_Controller
                 $this->course_m->context['status'] = $_GET['status'];
                 $res = $this->course_m->searchCourse();
                 $arrQry = array(
-                    'course'=> $_GET['course'],
-                    'month'=> $_GET['month'],
-                    'year'=> $_GET['year'],
-                    'status'=> $_GET['status'],
+                    'course' => $_GET['course'],
+                    'month' => $_GET['month'],
+                    'year' => $_GET['year'],
+                    'status' => $_GET['status'],
                 );
-                $qry ="?";
+                $qry = "?";
                 $qry .= http_build_query($arrQry);
             }
-        }else{
+        } else {
             $coursecode = '';
-            $this->course_m->context['courseID']= $courseID;
+            $this->course_m->context['courseID'] = $courseID;
             $res = $this->course_m->getCourseList(true);
         }
         $total = $this->course_m->getCountCourseList(true);
-        $pages = util::paging($total, $limit, 'register/course/index/%s/'.$qry,'Page',$page);
- //var_dump($total);
+        $pages = util::paging($total, $limit, 'register/course/index/%s/' . $qry, 'Page', $page);
+        //var_dump($total);
         $data = array();
         $data['data'] = $res;
         $data['paging'] = $pages;
@@ -109,10 +108,12 @@ class Course extends CI_Controller
 //var_dump($data['position']); exit;
 
 
-
         //popup
         $this->template->add_css('js/source/jquery.fancybox.css');
+        $this->template->add_css('css/uploadfile.css');
         $this->template->add_js('js/lib/jquery.mousewheel-3.0.6.pack.js');
+        $this->template->add_js('js/lib/jquery.uploadfile.min.js');
+        $this->template->add_js('js/init_upload.js');
         $this->template->add_js('js/source/jquery.fancybox.pack.js');
         $this->template->add_js('js_validate/courses.js');
 
@@ -360,11 +361,11 @@ class Course extends CI_Controller
             $this->template->write_view('content', 'register/pop_print_certificate', $data);
             $this->template->render();
             //$this->load->view('register/pop_print_certificate', $data);
-        }else if ($type == 'namelist') {
+        } else if ($type == 'namelist') {
             $this->load->view('register/pop_print_namelist', $data);
-        }else if ($type == 'certificatelist') {
+        } else if ($type == 'certificatelist') {
             $this->load->view('register/pop_print_cerlist', $data);
-        }else if ($type == 'taglist') {
+        } else if ($type == 'taglist') {
             $this->load->view('register/pop_print_taglist', $data);
         }
 
@@ -388,7 +389,7 @@ class Course extends CI_Controller
             $changeID = 0;
         }
 
-        echo  $changeID;
+        echo $changeID;
         exit;
     }
 
@@ -443,7 +444,7 @@ class Course extends CI_Controller
             $this->cert_m->context['id'] = 1;
             $txt = $this->cert_m->getTemplate();
             $data['template'] = $txt;
-         $this->load->view('register/pop_print_certificatepreview', $data);
+            $this->load->view('register/pop_print_certificatepreview', $data);
         }
 
     }
@@ -463,6 +464,32 @@ class Course extends CI_Controller
         $arrayToJs[0] = 'user';
         echo json_encode($arrayToJs);
         exit;
+    }
+
+    function upload_hostpital_course()
+    {
+        $config['upload_path'] = setting::$PATH_PDF;
+        $config['allowed_types'] = 'csv';
+        $config['file_name'] = 'hospital_list';
+        $config['max_size'] = '5120';
+        $config['overwrite'] = true;
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('mycsv')) {
+            $error = array('error' => $this->upload->display_errors());
+            echo $error;
+        } else {
+            $data = array('upload_data' => $this->upload->data());
+            $fn = $data['upload_data']['full_path'];
+            $csv = array_map('str_getcsv', file($fn));
+            unset($csv[0]);
+//            header('Content-Type: application/json');
+            $json = json_encode($csv);
+            echo $json;
+            exit;
+
+
+        }
+
     }
 
 

@@ -185,6 +185,27 @@
         <td class="tab">รายละเอียดการอบรม</td>
     </tr>
 </table>
+<!-- especial group-->
+    <table border="0" cellspacing="2" cellpadding="2" align="center">
+        <tr>
+            <td>
+                <input name="cond_total" id="cond_total" maxlength="4" >
+        </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="fileuploader">Upload</div>
+                <input type="hidden" name="cond_hospital" id="cond_hospital" value="" >
+            </td>
+            </tr>
+        <tr>
+            <td>
+                <a id="inline" href="#data">
+                กดเลือกกลุ่มของหลักสูตร
+                </a>
+            </td>
+        </tr>
+        </table>
 <!--article-->
 <table border="0" cellspacing="2" cellpadding="2" align="center">
     <tr>
