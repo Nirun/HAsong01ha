@@ -125,6 +125,8 @@ class Course extends CI_Controller
 
     function save()
     {
+
+
         //authen
         $pageID = 2;
         Authen::AllowPage($pageID, $this->session->userdata('role'));
@@ -138,6 +140,26 @@ class Course extends CI_Controller
         $map = $this->course_m->uploadmap();
         $this->course_m->context['picture'] = $map;
         $this->course_m->context['adminID'] = $this->session->userdata('ID');
+
+        //group condition
+
+        $post = $this->input->post();
+        $cond_total = $post['cond_total'];
+        $cond_hosp = $post['cond_hospital'];
+        $cond_pos = $post['cond_position'];
+        $cond_course = explode(",", $post['cond_course']);
+        unset($cond_course[count($cond_course) - 1]);
+
+        $arrCon = array();
+        $arrCon['hospital'] = json_decode($cond_hosp, true);
+        $arrCon['position'] = $cond_pos;
+        $arrCon['course'] = $cond_course;
+        $arrCon['max_register'] = $cond_total;
+        $arrEsp = array();
+        $arrEsp['group_course_cond'] = $arrCon;
+        $json_cond = json_encode($arrEsp);
+
+        $this->course_m->context['group_condition'] = $json_cond;
 
         //add course
         $id = $this->course_m->addCourse();
@@ -198,13 +220,29 @@ class Course extends CI_Controller
         $data['precourselist'] = $precourse;
         $data['precoursenamelist'] = $precoursenamelist;
         $data['course_type'] = $type;
+        //group course
+        //position
+
+        $arr_group_cond = json_decode($res[0]['group_condition'], true);
+        //var_dump($arr_group_cond['group_course_cond']);
+        $data['current_position'] = $arr_group_cond['group_course_cond']['position'];
+        $data['max_register'] = $arr_group_cond['group_course_cond']['max_register'];
+        $data['raw_group_course'] = $arr_group_cond['group_course_cond']['course'];
+        $data['group_course'] = implode(",", $arr_group_cond['group_course_cond']['course']);
+        $data['group_hospital'] = json_encode($arr_group_cond['group_course_cond']['hospital']);
+        $position = $this->course_m->getPosition();
+        $data['position'] = $position;
+
 
         //load template
         $this->template->set_template('admin');
 
         //popup
         $this->template->add_css('js/source/jquery.fancybox.css');
+        $this->template->add_css('css/uploadfile.css');
         $this->template->add_js('js/lib/jquery.mousewheel-3.0.6.pack.js');
+        $this->template->add_js('js/lib/jquery.uploadfile.min.js');
+        $this->template->add_js('js/init_upload.js');
         $this->template->add_js('js/source/jquery.fancybox.pack.js');
         $this->template->add_js('js_validate/courses.js');
 
@@ -232,6 +270,29 @@ class Course extends CI_Controller
         //docs
         $cID = $this->input->post('courseID');
         $this->course_m->uploaddocs($cID);
+
+        //group condition
+
+        $post = $this->input->post();
+        $cond_total = $post['cond_total'];
+        $cond_hosp = $post['cond_hospital'];
+        $cond_pos = $post['cond_position'];
+        $cond_course = explode(",", $post['cond_course']);
+
+        if (trim($cond_course[count($cond_course) - 1]) == '') {
+            unset($cond_course[count($cond_course) - 1]);
+        }
+
+        $arrCon = array();
+        $arrCon['hospital'] = json_decode($cond_hosp, true);
+        $arrCon['position'] = $cond_pos;
+        $arrCon['course'] = $cond_course;
+        $arrCon['max_register'] = $cond_total;
+        $arrEsp = array();
+        $arrEsp['group_course_cond'] = $arrCon;
+        $json_cond = json_encode($arrEsp);
+
+        $this->course_m->context['group_condition'] = $json_cond;
 
         //edit
         $ok = $this->course_m->editCourse();

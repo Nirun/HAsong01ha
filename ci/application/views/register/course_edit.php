@@ -84,7 +84,7 @@
                             <p class="fronttext"><strong>ข้อบังคับของหลักสูตรนี้</strong></p>
                         </td>
                         <td bgcolor="#a0cdf9">
-                            <a id="inline" href="#data"><img src="register/images/open.gif" width="185" height="24"
+                            <a class="inline" href="#data"><img src="register/images/open.gif" width="185" height="24"
                                                              border="0"/></a><br/>
 
                             <div style="display:none">
@@ -147,12 +147,41 @@
                             </div>
                         </td>
                     </tr>
+                    <!--group course-->
+                    <tr>
+                        <td class="info">
+                            <p>
+                                เลือกให้อบรมเฉพาะวิชาชีพ
+                            </p>
+                            <ul class="course-position"
+                                style="list-style: none;width: 350px;margin-top: 20px">
+
+                                <?php
+                                foreach ($position as $k => $v) {
+                                   $chk = "";
+                                    if(in_array($v['positionID'],$current_position)){
+                                        $chk = "checked='checked'";
+                                    }
+                                    ?>
+                                    <li style="float: left;width: 175px">
+                                        <input id="pos_<?= $v['positionID'] ?>" type="checkbox"
+                                               name="cond_position[]" value="<?= $v['positionID'] ?>" <?=$chk?>>
+                                        <label
+                                            for="os_<?= $v['positionID'] ?>"><?= $v['position'] ?></label>
+                                    </li>
+                                    <?php
+                                }
+                                ?>
+                            </ul>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="2" height="80px" valign="top">
                             <div id="courselist" class="info"><?php echo $precoursenamelist;?></div>
                             <input type="hidden" id="precourseID" name="precourseID" value="<?php echo $prelist;?>">
                         </td>
                     </tr>
+
                 </table>
                 <br>
                 <strong>คุณสมบัติของผู้เข้าอบรม</strong> <br/>
@@ -185,6 +214,88 @@
         <td bgcolor="#a0cdf9">รายละเอียดการอบรม</td>
     </tr>
 </table>
+    <!-- group course-->
+    <table border="0" cellspacing="2" cellpadding="2" align="center" style="background-color: #fbcb09">
+        <tr>
+            <td>
+
+                <input type="text" name="cond_total" id="cond_total" maxlength="4" size="5"
+                       style="text-align: right" value="<?=$max_register?>">
+                <label for="cond_total"> คน</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="fileuploader">Upload</div>
+                <input type="text" name="cond_hospital" id="cond_hospital" value='<?=$group_hospital?>'>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 10px">
+                <a class="inline" href="#data-con">
+                    <span style="background-color: #888888;padding: 5px 10px;">
+                                    กดเลือกกลุ่มของหลักสูตร</span>
+                </a>
+                <input type="text" id="cond_course" name="cond_course" value="<?=$group_course?>">
+            </td>
+        </tr>
+    </table>
+    <div style="display:none">
+        <div id="data-con">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr valign="left">
+                    <td colspan="2" align="left"><font class="title"><strong>All
+                                Course/Order by
+                                Alphabet</strong></font>
+                    </td>
+                </tr>
+                <tr valign="left">
+                    <td align="left"><img src="images/blank.gif" alt=""
+                                          width="10" height="1"
+                                          border="0"></td>
+                    <td align="left"><img src="images/blank.gif" alt=""
+                                          width="350" height="1"
+                                          border="0"></td>
+                </tr>
+                <?php
+                $countCourse = count($courselist);
+                if ($countCourse != 0) {
+                    foreach ($courselist as $val):
+                        $courseID = $val['courseID'];
+                        $precourse = $val['coursecode'] . ":" . $val['coursename'];
+                        $chk2 = "";
+                        if(in_array($courseID,$raw_group_course)){
+                            $chk2 = "checked='checked'";
+                        }
+                        ?>
+                        <tr valign="middle">
+                            <td width="20"><input name="con_courses[]"
+                                                  type="checkbox"
+                                                  value="<?php echo $courseID ?>" <?=$chk2?>/>
+                            </td>
+                            <td class="info"
+                                align="left"><?php echo $precourse ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr valign="middle">
+                        <td colspan="2" align="center">
+                            <input type="button" id="btn_save_cond" value="Save">
+                        </td>
+                    </tr>
+                    <?php
+                } else {
+                    ?>
+                    <tr valign="middle">
+                        <td colspan="2" align="center">
+                            <strong>ไม่พบข้อมูลหลักสูตร</strong>
+                        </td>
+                    </tr>
+
+                <?php } ?>
+            </table>
+        </div>
+    </div>
+    <!-- / group course-->
 <!--article-->
 <table border="0" cellspacing="2" cellpadding="2" align="center">
 <tr>

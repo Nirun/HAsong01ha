@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("a#inline").fancybox({
+    $("a.inline").fancybox({
         minWidth:800,
         minHeight:400
     });
@@ -23,6 +23,17 @@ $(document).ready(function() {
 
         $('#precourseID').val(items);
 
+        $.fancybox.close();
+    });
+
+    $("#btn_save_cond").click(function () {
+        var items = [];
+        var txtID = '';
+        $("input[name='con_courses[]']:checked").each(function () {
+            items.push($(this).val());
+            txtID += $(this).val() + ','
+        });
+        $("#cond_course").val(txtID);
         $.fancybox.close();
     });
 

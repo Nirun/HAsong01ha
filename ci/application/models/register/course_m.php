@@ -764,7 +764,9 @@ class Course_m extends CI_Model
             'map' => $this->context['picture'],
             'IsDelete' => 0,
             'createdatetime' => date('Y-m-d H:i:s'),
-            'createuser' => $this->context['adminID']
+            'createuser' => $this->context['adminID'],
+            'group_condition' => $this->context['group_condition']
+
         );
 
         $this->db->trans_begin();
@@ -845,7 +847,8 @@ class Course_m extends CI_Model
             'lastupdatetime' => date('Y-m-d H:i:s'),
             'updateuser' => $this->context['adminID'],
             'gen_year' => $this->input->post('gen_year'),
-            'payenddate' => $this->input->post('payenddate')
+            'payenddate' => $this->input->post('payenddate'),
+            'group_condition' => $this->context['group_condition']
         );
 
         if ($this->context['picture'] != '') {
