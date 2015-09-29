@@ -144,11 +144,18 @@ class Course extends CI_Controller
         //group condition
 
         $post = $this->input->post();
-        $cond_total = $post['cond_total'];
-        $cond_hosp = $post['cond_hospital'];
-        $cond_pos = $post['cond_position'];
-        $cond_course = explode(",", $post['cond_course']);
-        unset($cond_course[count($cond_course) - 1]);
+        $cond_total = intval($post['cond_total']);
+        $cond_hosp = (trim($post['cond_hospital']) != '') ? trim($post['cond_hospital']) : null;
+        $cond_pos = (!isset($post['cond_position'])) ? null : $post['cond_position'];
+        if (trim($post['cond_course']) != '') {
+            $cond_course = explode(",", $post['cond_course']);
+
+            if (trim($cond_course[count($cond_course) - 1]) == '') {
+                unset($cond_course[count($cond_course) - 1]);
+            }
+        } else {
+            $cond_course = null;
+        }
 
         $arrCon = array();
         $arrCon['hospital'] = json_decode($cond_hosp, true);
@@ -224,11 +231,11 @@ class Course extends CI_Controller
         //position
 
         $arr_group_cond = json_decode($res[0]['group_condition'], true);
-        //var_dump($arr_group_cond['group_course_cond']);
+//        var_dump($arr_group_cond['group_course_cond']);
         $data['current_position'] = $arr_group_cond['group_course_cond']['position'];
         $data['max_register'] = $arr_group_cond['group_course_cond']['max_register'];
         $data['raw_group_course'] = $arr_group_cond['group_course_cond']['course'];
-        $data['group_course'] = implode(",", $arr_group_cond['group_course_cond']['course']);
+        $data['group_course'] = (is_array($arr_group_cond['group_course_cond']['course'])) ? implode(",", $arr_group_cond['group_course_cond']['course']) : '';
         $data['group_hospital'] = json_encode($arr_group_cond['group_course_cond']['hospital']);
         $position = $this->course_m->getPosition();
         $data['position'] = $position;
@@ -274,13 +281,17 @@ class Course extends CI_Controller
         //group condition
 
         $post = $this->input->post();
-        $cond_total = $post['cond_total'];
+        $cond_total = intval($post['cond_total']);
         $cond_hosp = $post['cond_hospital'];
-        $cond_pos = $post['cond_position'];
-        $cond_course = explode(",", $post['cond_course']);
+        $cond_pos = (!isset($post['cond_position'])) ? null : $post['cond_position'];
+        if (trim($post['cond_course']) != '') {
+            $cond_course = explode(",", $post['cond_course']);
 
-        if (trim($cond_course[count($cond_course) - 1]) == '') {
-            unset($cond_course[count($cond_course) - 1]);
+            if (trim($cond_course[count($cond_course) - 1]) == '') {
+                unset($cond_course[count($cond_course) - 1]);
+            }
+        } else {
+            $cond_course = null;
         }
 
         $arrCon = array();
@@ -291,6 +302,7 @@ class Course extends CI_Controller
         $arrEsp = array();
         $arrEsp['group_course_cond'] = $arrCon;
         $json_cond = json_encode($arrEsp);
+
 
         $this->course_m->context['group_condition'] = $json_cond;
 

@@ -482,7 +482,7 @@ class User_m extends CI_Model
 
     function get_user_profile($id)
     {
-        $this->db->select('pf.title_th as prefix,t.prefix_other,t.name,t.lastname,t.email,d.tel,d.mobile,d.fax,o.title_th as occupation,t.professionother,p.position,t.positionother,d.address,pv.PROVINCE_NAME,d.postcode,d.soi,d.road,d.district,t.cardID');
+        $this->db->select('pf.title_th as prefix,t.prefix_other,t.name,t.lastname,t.email,d.tel,d.mobile,d.fax,o.title_th as occupation,t.professionother,p.position,t.positionother,d.address,pv.PROVINCE_NAME,d.postcode,d.soi,d.road,d.district,t.cardID,t.hospitalID');
         $this->db->from('tbl_trainees t');
         $this->db->join('tbl_address d', 'd.traineeID = t.traineeID', 'left');
         $this->db->join('tbl_prefix_name pf', 'pf.id = t.prefix', 'left');
@@ -1294,6 +1294,19 @@ and date(a.registerdatetime) = date(now()-interval 4 day)");
 //        $this->db->select('registrationID');
 //        $this->db->from('tbl_registration');
 //        $this->db->where("isPaid = 2 and isDelete = 0 and refID = 0 and date(registerdatetime) = date(now()-interval 4 day)");
+        $res = $db->result_array();
+        return $res;
+    }
+
+    function getCountHospitalRegisterGroup($courseID)
+    {
+        $sql = "SELECT c.hospitalID,count(c.hospitalID) as total
+FROM tbl_registration a
+left join tbl_registration b on a.refID = b.registrationID
+left join tbl_trainees c on c.traineeID = case a.refID when 0 then a.traineeID else b.traineeID end
+where a.refType = 0 and a.isDelete = 0 and a.courseID = {$courseID}
+group by c.hospitalID";
+        $db = $this->db->query($sql);
         $res = $db->result_array();
         return $res;
     }

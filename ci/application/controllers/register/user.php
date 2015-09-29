@@ -501,6 +501,7 @@ class User extends CI_Controller
 
         Authen::memberAllow($this->session->userdata('isLogin'));
         $id = $this->session->userdata('traineeID');
+//        var_dump($this->session->userdata);
         $mounth = date('m');
         $this->load->model('register/user_m', 'user_m');
         $this->load->model('register/hospital_m', 'hospital_m');
@@ -704,7 +705,6 @@ class User extends CI_Controller
 
     function apply_course_detail()
     {
-
         if (!$this->uri->segment(3)) {
             redirect('/member/main/');
             exit;
@@ -724,12 +724,13 @@ class User extends CI_Controller
         $isShowBtn = false;
         $data = array();
         $data['data'] = $dataCourse[0];
-        //var_dump($data['data']); exit;
+//        var_dump($data['data']); exit;
         $data['optional'] = $opt;
         $data['docs'] = $dataDocs;
         $data['courseID'] = $courseID;
         $data['C_reg'] = $C_reg;
         $data['C_paid'] = $C_paid;
+        $data['coursetypeID'] = $dataCourse[0]['coursetypeID']; // group course = 3
         $this->template->set_template('member');
 
         $limitTrainees = $data['data']['limittrainees'];
@@ -754,7 +755,7 @@ class User extends CI_Controller
         } else {
             $btn_status = 1;
         }
-       $data['btn_status']=$btn_status;
+        $data['btn_status'] = $btn_status;
 
         // $this->template->add_js('scripts/thickbox.js');
         //  $this->template->add_css('css/thickbox.css');
@@ -764,6 +765,7 @@ class User extends CI_Controller
         $this->template->add_js('js/source/jquery.fancybox.pack.js');
 
         $this->template->add_js('js_validate/popup_reserve.js');
+        $this->template->add_js('js_validate/valid_group_course.js');
         $this->template->add_css('js/source/jquery.fancybox.css');
         $this->template->add_css('js_ui/jquery-ui.css');
         $this->template->add_js('js_ui/jquery-ui.js');
@@ -1186,15 +1188,14 @@ class User extends CI_Controller
 //        $tmp = $this->user_m->getTmpId();
 //        $tmpID = $tmp[0]['id'];
         $regDate = date('Y-m-d');
-        $separateRegDate = explode("-",$regDate);
+        $separateRegDate = explode("-", $regDate);
         $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
         $nowDate = date('Y-m-d');
         $txt_end_pay = "กรุณาชำระเงินภายใน  15 วัน";
-        if(strtotime($regDate) <= strtotime($nowDate)){
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน ".Thaidate::date($data["payenddate"],"DD MM YYYY");
-        }
-        else{
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน ".Thaidate::date($regDate.' 00:00:00',"DD MM YYYY");
+        if (strtotime($regDate) <= strtotime($nowDate)) {
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
+        } else {
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate . ' 00:00:00', "DD MM YYYY");
         }
 
         $ref_no = intval($this->user_m->getRefNo($data['courseID'])) + 1; // SET NEW REF_ID
@@ -1278,15 +1279,14 @@ class User extends CI_Controller
 //        $data['ref1'] = $refInfo[0]['billing_ref1'];
 
         $regDate = date('Y-m-d', strtotime($data['registerdatetime']));
-        $separateRegDate = explode("-",$regDate);
+        $separateRegDate = explode("-", $regDate);
         $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
         $nowDate = date('Y-m-d');
         $txt_end_pay = "กรุณาชำระเงินภายใน  15 วัน";
-        if(strtotime($regDate) <= strtotime($nowDate)){
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน ".Thaidate::date($data["payenddate"],"DD MM YYYY");
-        }
-        else{
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน ".Thaidate::date($regDate.' 00:00:00',"DD MM YYYY");
+        if (strtotime($regDate) <= strtotime($nowDate)) {
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
+        } else {
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate . ' 00:00:00', "DD MM YYYY");
         }
         $content = file_get_contents('template_email/bill.html');
         $content = str_replace('<!--date-->', date('d/m/Y'), $content);
@@ -1433,14 +1433,14 @@ class User extends CI_Controller
         $this->load->model('register/user_m', 'user_m');
         if ($regisBy == 0) {
             $res = $this->user_m->getRegisterInfo($regisID);
-            $addr =  $res[0];
+            $addr = $res[0];
             $txtAddr = "";
             $txtAddr = $addr['rc_address'];
-            $txtAddr .=' '. $addr['rc_soi'];
-            $txtAddr .=' '. $addr['rc_road'];
-            $txtAddr .=' '. $addr['rc_district'];
-            $txtAddr .=' '. $addr['rc_province'];
-            $txtAddr .=' '. $addr['rc_postcode'];
+            $txtAddr .= ' ' . $addr['rc_soi'];
+            $txtAddr .= ' ' . $addr['rc_road'];
+            $txtAddr .= ' ' . $addr['rc_district'];
+            $txtAddr .= ' ' . $addr['rc_province'];
+            $txtAddr .= ' ' . $addr['rc_postcode'];
             $txt = "<div><p>" . $res[0]['rc_name'] . "</p>";
             $txt .= "<span>" . $txtAddr . "</span></div>";
 //            $txt .= "<span>" . $res[0]['rc_address'] . "</span</div>";
@@ -1450,14 +1450,14 @@ class User extends CI_Controller
             foreach ($res1 as $k => $v) {
                 $regID = $v['registrationID'];
                 $res2 = $this->user_m->getRegisterInfo($regID);
-                $addr =  $res2[0];
+                $addr = $res2[0];
                 $txtAddr = "";
                 $txtAddr = $addr['rc_address'];
-                $txtAddr .=' '. $addr['rc_soi'];
-                $txtAddr .=' '. $addr['rc_road'];
-                $txtAddr .=' '. $addr['rc_district'];
-                $txtAddr .=' '. $addr['rc_province'];
-                $txtAddr .=' '. $addr['rc_postcode'];
+                $txtAddr .= ' ' . $addr['rc_soi'];
+                $txtAddr .= ' ' . $addr['rc_road'];
+                $txtAddr .= ' ' . $addr['rc_district'];
+                $txtAddr .= ' ' . $addr['rc_province'];
+                $txtAddr .= ' ' . $addr['rc_postcode'];
                 $txt .= "<div><p>" . $res2[0]['rc_name'] . "</p>";
                 $txt .= "<span>" . $txtAddr . "</span></div>";
             }
@@ -1485,5 +1485,62 @@ class User extends CI_Controller
             }
         }
 
+    }
+
+    function register_group_course()
+    {
+        $ret = false;
+        $courseID = $this->input->post('courseID');
+        $id = $this->session->userdata('traineeID');
+        $this->load->model('register/user_m', 'user_m');
+        $this->load->model('register/course_m', 'course_m');
+        $dataCourse = $this->course_m->getCourse($courseID);
+        $course_cond = $dataCourse[0]['group_condition'];
+
+        $res = $this->user_m->get_user_profile($id);
+        $hospitalID = $res[0]['hospitalID'];
+        if ($course_cond != null) {
+            $datacond = json_decode($course_cond, true);
+
+        }
+        if ($course_cond == null) {
+            $ret = true;
+        } else if (count($datacond['group_course_cond']['hospital']) > 0) {
+            $chk = false;
+            $arrHos = $datacond['group_course_cond']['hospital'];
+            foreach ($arrHos as $k => $v) {
+                if ($hospitalID == $v[0]) {
+                    $chk = true;
+                    break;
+                }
+            }
+            if ($chk) {
+                $max_register = $datacond['group_course_cond']['max_register'];
+                if ($max_register != 0) {
+                    $dataChk = $this->user_m->getCountHospitalRegisterGroup($courseID);
+                    if (count($dataChk) > 0) {
+                        foreach ($dataChk as $k1 => $v1) {
+                            if ($hospitalID == $v1['hospitalID'] && $max_register > $v1['total']) {
+                                $ret = true;
+                                break;
+                            }
+                        }
+
+                        var_dump($dataChk, $max_register);
+
+                    } else {
+                        $ret = true;
+                    }
+                } else {
+                    $ret = true;
+                }
+
+            }
+            // print_r($arrHos);
+        }
+
+        var_dump($ret);
+//        var_dump($res, $course_cond);
+        exit;
     }
 }

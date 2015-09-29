@@ -99,14 +99,14 @@
  หมายถึงหลักสูตรการอบรมนี้ได้หมดเขตการสมัครแล้ว</font><br>  <br/>
         <?php if ($btn_status == 1): ?>
             <a id="reserve_2" rel="<?php echo $courseID ?>"
-               href="<?= setting::$BASE_URL ?>/member/popup_reserve/<?php echo $courseID ?>">
+               href="<?= setting::$BASE_URL ?>/member/popup_reserve/<?php echo $courseID ?>" rev="<?=$coursetypeID?>">
                 <img src="imagenew/b_re.gif" border="0" style="cursor: pointer;"/>
             </a>
         <?php elseif ($btn_status == 2): ?>
             <img src="imagenew/b_re2.gif" border="0" style="cursor: pointer;"/>
         <?php
         elseif ($btn_status == 3): ?>
-            <a id="reserve_2" rel="<?php echo $courseID ?>"  href="<?= setting::$BASE_URL ?>/member/popup_reserve/<?php echo $courseID ?>">
+            <a id="reserve_2" rel="<?php echo $courseID ?>"  href="<?= setting::$BASE_URL ?>/member/popup_reserve/<?php echo $courseID ?>" rev="<?=$coursetypeID?>">
             <img src="imagenew/b_re3.gif" border="0" style="cursor: pointer;"/>
             </a>
         <?php endif; ?>
