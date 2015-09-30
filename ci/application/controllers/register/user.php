@@ -1490,6 +1490,7 @@ class User extends CI_Controller
     function register_group_course()
     {
         $ret = false;
+        $msg = '';
         $courseID = $this->input->post('courseID');
         $id = $this->session->userdata('traineeID');
         $this->load->model('register/user_m', 'user_m');
@@ -1504,6 +1505,7 @@ class User extends CI_Controller
 
         }
         if ($course_cond == null) {
+            $msg = 'No specific hospital';
             $ret = true;
         } else if (count($datacond['group_course_cond']['hospital']) > 0) {
             $chk = false;
@@ -1520,26 +1522,33 @@ class User extends CI_Controller
                     $dataChk = $this->user_m->getCountHospitalRegisterGroup($courseID);
                     if (count($dataChk) > 0) {
                         foreach ($dataChk as $k1 => $v1) {
-                            if ($hospitalID == $v1['hospitalID'] && $max_register > $v1['total']) {
-                                $ret = true;
+                            if ($hospitalID == $v1['hospitalID']) {
+                                if ($max_register > $v1['total']) {
+                                    $ret = true;
+                                    $msg = 'register available';
+                                } else {
+                                    $ret = false;
+                                    $msg = 'maximum register';
+                                }
                                 break;
                             }
                         }
-
-                        var_dump($dataChk, $max_register);
-
                     } else {
                         $ret = true;
+                        $msg = 'your hospital available';
                     }
                 } else {
                     $ret = true;
+                    $msg = 'No limit register';
                 }
 
             }
             // print_r($arrHos);
         }
-
-        var_dump($ret);
+        $raw_json = array('response' => $ret, 'msg' => $msg);
+        $json = json_encode($raw_json);
+        header('Content-Type: application/json');
+        echo $json;
 //        var_dump($res, $course_cond);
         exit;
     }
