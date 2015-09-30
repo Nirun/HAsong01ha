@@ -86,6 +86,7 @@ class Course extends CI_Controller
         Authen::AllowPage($pageID, $this->session->userdata('role'));
 
         $this->load->model('register/course_m', 'course_m');
+        $this->load->model('register/user_m', 'user_m');
 
         //load optionals
         $data = array();
@@ -102,7 +103,7 @@ class Course extends CI_Controller
         //load template
         $this->template->set_template('admin');
         //position
-        $position = $this->course_m->getPosition();
+        $position = $this->user_m->getOccupation();
         $data['position'] = $position;
 
 //var_dump($data['position']); exit;
@@ -191,6 +192,7 @@ class Course extends CI_Controller
         Authen::AllowPage($pageID, $this->session->userdata('role'));
 
         $this->load->model('register/course_m', 'course_m');
+        $this->load->model('register/user_m', 'user_m');
 
         if (!$this->uri->segment(4)) {
             redirect('/register/course/', 'refresh');
@@ -237,7 +239,7 @@ class Course extends CI_Controller
         $data['raw_group_course'] = $arr_group_cond['group_course_cond']['course'];
         $data['group_course'] = (is_array($arr_group_cond['group_course_cond']['course'])) ? implode(",", $arr_group_cond['group_course_cond']['course']) : '';
         $data['group_hospital'] = json_encode($arr_group_cond['group_course_cond']['hospital']);
-        $position = $this->course_m->getPosition();
+        $position = $this->user_m->getOccupation();
         $data['position'] = $position;
 
 

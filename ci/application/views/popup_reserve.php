@@ -88,7 +88,7 @@
                      * course type :2 = forum
                      */
                    // $limitUser = ($courseType == 2) ? 20 : 5;
-                    $limitUser = 20;
+                     $limitUser = ($maximum_register == 0) ? 20 : $maximum_register;
                     for ($i = 1; $i <= $limitUser; $i++):
                         ?>   <table width="98%" border="0" cellspacing="2" cellpadding="2" align="center" >
   <tr>

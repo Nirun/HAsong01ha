@@ -166,16 +166,16 @@
                                                 <?php
                                                 foreach ($position as $k => $v) {
                                                     $chk = "";
-                                                    if ($current_position != null && in_array($v['positionID'], $current_position)) {
+                                                    if ($current_position != null && in_array($v['id'], $current_position)) {
                                                         $chk = "checked='checked'";
                                                     }
                                                     ?>
                                                     <li style="float: left;width: 175px">
-                                                        <input id="pos_<?= $v['positionID'] ?>" type="checkbox"
+                                                        <input id="pos_<?= $v['id'] ?>" type="checkbox"
                                                                name="cond_position[]"
-                                                               value="<?= $v['positionID'] ?>" <?= $chk ?>>
+                                                               value="<?= $v['id'] ?>" <?= $chk ?>>
                                                         <label
-                                                            for="os_<?= $v['positionID'] ?>"><?= $v['position'] ?></label>
+                                                            for="os_<?= $v['id'] ?>"><?= $v['title_th'] ?></label>
                                                     </li>
                                                     <?php
                                                 }

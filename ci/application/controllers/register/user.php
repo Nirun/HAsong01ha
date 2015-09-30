@@ -909,21 +909,42 @@ class User extends CI_Controller
         $id = $this->session->userdata('traineeID');
         $this->load->model('register/user_m', 'user_m');
         $this->load->model('register/course_m', 'course_m');
-        $res = $this->user_m->get_user_profile($id);
-        $food = $this->user_m->getFoodType();
+
 //        $courseID = $this->input->post('courseID');
         $courseID = $this->uri->segment(3);
         $resCourse = $this->course_m->getCourse($courseID);
+
+        // group course
+        $courseTypeID = $resCourse[0]['coursetypeID'];
+        $cond_maximize = 0;
+        $cond_position = null;
+        if($courseTypeID==3){
+            $course_cond = $resCourse[0]['group_condition'];
+            $arr_group_cond = json_decode($course_cond, true);
+            $cond_position = $arr_group_cond['group_course_cond']['position'];
+            $cond_maximize = $arr_group_cond['group_course_cond']['max_register'];
+        }
+
+
+        $res = $this->user_m->get_user_profile($id);
+        $food = $this->user_m->getFoodType();
+
         $data = array();
         $data['data'] = $res[0];
         $data['food'] = $food;
         $data['prefix'] = $this->user_m->getPrefixName();
-        $data['occupation'] = $this->user_m->getOccupation();
+        if($cond_position!=null){
+            $data['occupation'] = $this->user_m->getOccupationByID($cond_position);
+        }
+        else{
+            $data['occupation'] = $this->user_m->getOccupation();
+        }
         $data['position'] = $this->user_m->getPosition();
         $data['traineeID'] = $id;
         $data['courseID'] = $courseID;
         $data['courseType'] = $resCourse[0]['coursetypeID'];
         $data['course'] = $resCourse[0];
+        $data['maximum_register'] = $cond_maximize;
 
         $this->template->set_template('member');
         $this->template->add_js('js_validate/jquery.js');
@@ -1497,59 +1518,78 @@ class User extends CI_Controller
         $this->load->model('register/course_m', 'course_m');
         $dataCourse = $this->course_m->getCourse($courseID);
         $course_cond = $dataCourse[0]['group_condition'];
-
+//print_r($course_cond); exit;
         $res = $this->user_m->get_user_profile($id);
         $hospitalID = $res[0]['hospitalID'];
         if ($course_cond != null) {
             $datacond = json_decode($course_cond, true);
 
         }
+
         if ($course_cond == null) {
             $msg = 'No specific hospital';
             $ret = true;
-        } else if (count($datacond['group_course_cond']['hospital']) > 0) {
-            $chk = false;
-            $arrHos = $datacond['group_course_cond']['hospital'];
-            foreach ($arrHos as $k => $v) {
-                if ($hospitalID == $v[0]) {
-                    $chk = true;
-                    break;
-                }
-            }
-            if ($chk) {
-                $max_register = $datacond['group_course_cond']['max_register'];
-                if ($max_register != 0) {
-                    $dataChk = $this->user_m->getCountHospitalRegisterGroup($courseID);
-                    if (count($dataChk) > 0) {
-                        foreach ($dataChk as $k1 => $v1) {
-                            if ($hospitalID == $v1['hospitalID']) {
-                                if ($max_register > $v1['total']) {
-                                    $ret = true;
-                                    $msg = 'register available';
-                                } else {
-                                    $ret = false;
-                                    $msg = 'maximum register';
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-                        $ret = true;
-                        $msg = 'your hospital available';
+        } else if (count($datacond['group_course_cond']['course']) > 0) {
+            $chk1 = true;
+            $arrCourse = $datacond['group_course_cond']['course'];
+            $Qry = implode(",", $arrCourse);
+            $dataChk = $this->user_m->getHospitalRegistered($Qry);
+            if (count($dataChk) > 0) {
+                foreach ($dataChk as $k1 => $v1) {
+                    if ($hospitalID == $v1['hospitalID']) {
+                        $chk1 = false;
+                        $ret = false;
+                        $msg = 'you registered in group';
+                        break;
                     }
-                } else {
-                    $ret = true;
-                    $msg = 'No limit register';
                 }
-
             }
-            // print_r($arrHos);
+
+            if ($chk1) {
+                if (count($datacond['group_course_cond']['hospital']) > 0) {
+                    $chk = false;
+                    $arrHos = $datacond['group_course_cond']['hospital'];
+                    foreach ($arrHos as $k => $v) {
+                        if ($hospitalID == $v[0]) {
+                            $chk = true;
+                            break;
+                        }
+                    }
+                    if ($chk) {
+                        $max_register = $datacond['group_course_cond']['max_register'];
+                        if ($max_register != 0) {
+                            $dataChk = $this->user_m->getCountHospitalRegisterGroup($courseID);
+                            if (count($dataChk) > 0) {
+                                foreach ($dataChk as $k1 => $v1) {
+                                    if ($hospitalID == $v1['hospitalID']) {
+                                        if ($max_register > $v1['total']) {
+                                            $ret = true;
+                                            $msg = 'register available';
+                                        } else {
+                                            $ret = false;
+                                            $msg = 'maximum register';
+                                        }
+                                        break;
+                                    }
+                                }
+                            } else {
+                                $ret = true;
+                                $msg = 'your hospital available';
+                            }
+                        } else {
+                            $ret = true;
+                            $msg = 'No limit register';
+                        }
+
+                    }
+                }
+            }
+
+            $raw_json = array('response' => $ret, 'msg' => $msg);
+            $json = json_encode($raw_json);
+            header('Content-Type: application/json');
+            echo $json;
+            exit;
         }
-        $raw_json = array('response' => $ret, 'msg' => $msg);
-        $json = json_encode($raw_json);
-        header('Content-Type: application/json');
-        echo $json;
-//        var_dump($res, $course_cond);
-        exit;
     }
 }

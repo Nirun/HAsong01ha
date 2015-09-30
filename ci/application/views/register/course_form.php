@@ -149,10 +149,10 @@
                                                 foreach ($position as $k => $v) {
                                                     ?>
                                                     <li style="float: left;width: 175px">
-                                                        <input id="pos_<?= $v['positionID'] ?>" type="checkbox"
-                                                               name="cond_position[]" value="<?= $v['positionID'] ?>">
+                                                        <input id="pos_<?= $v['id'] ?>" type="checkbox"
+                                                               name="cond_position[]" value="<?= $v['id'] ?>">
                                                         <label
-                                                            for="os_<?= $v['positionID'] ?>"><?= $v['position'] ?></label>
+                                                            for="os_<?= $v['id'] ?>"><?= $v['title_th'] ?></label>
                                                     </li>
                                                     <?php
                                                 }

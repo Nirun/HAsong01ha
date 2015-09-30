@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by JetBrains PhpStorm.
  * User: Nirun
@@ -18,9 +19,15 @@ class User_m extends CI_Model
 
     function getOccupation()
     {
-        return $this->db->get('tbl_occupation')->result_array();
+                return $this->db->get('tbl_occupation')->result_array();
     }
-
+    function getOccupationByID($id)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_occupation');
+        $this->db->where_in('id',$id);
+        return $this->db->get()->result_array();
+    }
     function getPrefixName()
     {
         return $this->db->get('tbl_prefix_name')->result_array();
@@ -510,7 +517,7 @@ class User_m extends CI_Model
     {
         $ok = false;
         $email = $this->input->get('email');
-        $query = $this->db->get_where('tbl_trainees', array('email' => $email,'registrationtype'=>1));
+        $query = $this->db->get_where('tbl_trainees', array('email' => $email, 'registrationtype' => 1));
         if ($query->num_rows() === 0) {
             $ok = true;
         }
@@ -767,12 +774,12 @@ class User_m extends CI_Model
                             /* receipt info */
                             if ($billType == 'separate') {
                                 if ($billDefault == 1) {
-                                    $this->addReceiptInfo($trainee_add_ID, $billName[$rowBill], $billAdd[0],$billSoi[0],$billRoad[0],$billDistrict[0],$billProvince[0],$billPostcode[0],$billtaxID[0]);
+                                    $this->addReceiptInfo($trainee_add_ID, $billName[$rowBill], $billAdd[0], $billSoi[0], $billRoad[0], $billDistrict[0], $billProvince[0], $billPostcode[0], $billtaxID[0]);
                                 } else {
-                                    $this->addReceiptInfo($trainee_add_ID, $billName[$rowBill], $billAdd[$rowBill],$billSoi[$rowBill],$billRoad[$rowBill],$billDistrict[$rowBill],$billProvince[$rowBill],$billPostcode[$rowBill],$billtaxID[$rowBill]);
+                                    $this->addReceiptInfo($trainee_add_ID, $billName[$rowBill], $billAdd[$rowBill], $billSoi[$rowBill], $billRoad[$rowBill], $billDistrict[$rowBill], $billProvince[$rowBill], $billPostcode[$rowBill], $billtaxID[$rowBill]);
                                 }
                             } else {
-                                $this->addReceiptInfo($trainee_add_ID, $billName, $billAdd,$billSoi,$billRoad,$billDistrict,$billProvince,$billPostcode,$billtaxID);
+                                $this->addReceiptInfo($trainee_add_ID, $billName, $billAdd, $billSoi, $billRoad, $billDistrict, $billProvince, $billPostcode, $billtaxID);
                             }
                             $this->db->trans_commit();
                         }
@@ -784,7 +791,7 @@ class User_m extends CI_Model
 
                     }
                 } else {
-                    $this->addReceiptInfo($add_ID, $billName, $billAdd,$billSoi,$billRoad,$billDistrict,$billProvince,$billPostcode,$billtaxID);
+                    $this->addReceiptInfo($add_ID, $billName, $billAdd, $billSoi, $billRoad, $billDistrict, $billProvince, $billPostcode, $billtaxID);
                     $ok = true;
                     $this->db->trans_commit();
                     $ok = $add_ID;
@@ -943,7 +950,7 @@ class User_m extends CI_Model
         $data = array(
             'billing_ref1' => $ref1,
             'billing_ref2' => $ref2,
-            'IsPaid'=>2
+            'IsPaid' => 2
         );
 
         $this->db->where('registrationID', $regisID);
@@ -957,7 +964,7 @@ class User_m extends CI_Model
         return $ok;
     }
 
-    function addReceiptInfo($regisID = 0, $name = '', $address = '',$soi='',$road='',$district='',$province='',$postcode='',$taxID='')
+    function addReceiptInfo($regisID = 0, $name = '', $address = '', $soi = '', $road = '', $district = '', $province = '', $postcode = '', $taxID = '')
     {
         $ok = false;
         $data = array(
@@ -969,7 +976,7 @@ class User_m extends CI_Model
             'district' => $district,
             'province' => $province,
             'postcode' => $postcode,
-            'tax_id'=>$taxID
+            'tax_id' => $taxID
         );
         $chkInsert = $this->db->insert('tbl_receipt_info', $data);
         if (!$chkInsert) {
@@ -1031,7 +1038,7 @@ class User_m extends CI_Model
             'district' => $this->input->post('rc_district'),
             'province' => $this->input->post('rc_province'),
             'postcode' => $this->input->post('rc_postcode'),
-            'tax_id'=>$this->input->post('rc_taxID')
+            'tax_id' => $this->input->post('rc_taxID')
 
 
         );
@@ -1310,4 +1317,18 @@ group by c.hospitalID";
         $res = $db->result_array();
         return $res;
     }
+
+    function getHospitalRegistered($group_course)
+    {
+        $sql = "SELECT  b.hospitalID,a.courseID
+FROM tbl_registration a
+left join tbl_trainees b on b.traineeID = a.traineeID
+where a.courseID in ({$group_course})
+group by b.hospitalID,a.courseID";
+        $db = $this->db->query($sql);
+        $res = $db->result_array();
+        return $res;
+    }
+
+
 }
