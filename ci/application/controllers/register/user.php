@@ -725,12 +725,13 @@ class User extends CI_Controller
         $data = array();
         $data['data'] = $dataCourse[0];
 //        var_dump($data['data']); exit;
+        $coursetypeID = $dataCourse[0]['coursetypeID'];
         $data['optional'] = $opt;
         $data['docs'] = $dataDocs;
         $data['courseID'] = $courseID;
         $data['C_reg'] = $C_reg;
         $data['C_paid'] = $C_paid;
-        $data['coursetypeID'] = $dataCourse[0]['coursetypeID']; // group course = 3
+        $data['coursetypeID'] = $coursetypeID; // group course = 3
         $this->template->set_template('member');
 
         $limitTrainees = $data['data']['limittrainees'];
@@ -759,6 +760,17 @@ class User extends CI_Controller
 
         // $this->template->add_js('scripts/thickbox.js');
         //  $this->template->add_css('css/thickbox.css');
+        $data['group_course'] = null;
+if($coursetypeID==3){
+    $arr_group_cond = json_decode($dataCourse[0]['group_condition'],true);
+    $cond_course = $arr_group_cond['group_course_cond']['course'];
+    $cond_hospital = $arr_group_cond['group_course_cond']['hospital'];
+    if(count($cond_course)>0){
+
+    }
+    print_r($cond_course);
+}
+
 
         $this->template->add_js('js_validate/jquery.js');
         $this->template->add_js('js/lib/jquery.mousewheel-3.0.6.pack.js');

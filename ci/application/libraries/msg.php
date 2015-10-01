@@ -15,4 +15,5 @@ class Msg
     static $no_course = '<p align=left>ท่านยังไม่ได้สมัครอบรมในหลักสุตรใด <br></p>';
     static $no_course_short = 'ท่านยังไม่ได้สมัครอบรมในหลักสุตรใด';
     static $course_exists = 'ท่านได้สมัครอบรมในหลักสุตรนี้แล้ว';
+    static $group_course_msg = '<p style="color: red;">เปิดลงทะเบียนเฉพาะโรงพยาบาล</br>กดตรวสอบรายชื่อโรงพยาบาล</p>';
 }

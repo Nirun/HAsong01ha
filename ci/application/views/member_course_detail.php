@@ -93,6 +93,13 @@
 
 <div id="subheader">เนื้อหา</div>
  <?php echo $data['content']; ?>
+        <?php
+//        var_dump($data); exit;
+        if($data['coursetypeID']==3){
+            echo 'xxx 333';
+        }
+        ?>
+
 <br> 
 <br> 
 <font class="smtext">หากท่านไม่เห็นปุ่มกดลงทะเบียนด้านล่าง

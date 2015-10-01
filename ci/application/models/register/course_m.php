@@ -1253,5 +1253,12 @@ class Course_m extends CI_Model
         $data = $this->db->get('tbl_position');
         return $data->result_array();
     }
+    function getCourseById($id){
+        $this->db->select('*');
+        $this->db->from('tbl_courses');
+        $this->db->where_in('courseID', $id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 

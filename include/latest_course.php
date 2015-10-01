@@ -37,7 +37,11 @@ foreach ($course as $key => $val):
  <strong>ลงทะเบียนได้ตั้งแต่วันที่</strong><br>
 
  <?php echo (Thaidate::date($val['registstartdate'],'DD MM YYYY') . ' - ' . Thaidate::date($val['registenddate'],'DD MM YYYY'))?> 
-  
+  <?php
+  if($val['coursetypeID']==3) {
+      echo Msg::$group_course_msg;
+  }
+  ?>
 <br>
 <div class="butt"><a href="<?php echo setting::$BASE_URL.'/member/course_detail/'.$val['courseID']?>"  class="more2">ดูรายละเอียด และลงทะเบียน</a></div>
 </div>
