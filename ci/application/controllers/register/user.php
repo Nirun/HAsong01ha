@@ -761,15 +761,57 @@ class User extends CI_Controller
         // $this->template->add_js('scripts/thickbox.js');
         //  $this->template->add_css('css/thickbox.css');
         $data['group_course'] = null;
-if($coursetypeID==3){
-    $arr_group_cond = json_decode($dataCourse[0]['group_condition'],true);
-    $cond_course = $arr_group_cond['group_course_cond']['course'];
-    $cond_hospital = $arr_group_cond['group_course_cond']['hospital'];
-    if(count($cond_course)>0){
+        $data['group_hospital'] = null;
+        if ($coursetypeID == 3) {
+            $arr_group_cond = json_decode($dataCourse[0]['group_condition'], true);
+            $cond_course = $arr_group_cond['group_course_cond']['course'];
+            $cond_hospital = $arr_group_cond['group_course_cond']['hospital'];
+            $max_register = $arr_group_cond['group_course_cond']['max_register'];
+            if (count($cond_course) > 0) {
+                $arrGC = array();
+                $res_group_course = $this->course_m->getCourseById($cond_course);
+                foreach ($res_group_course as $kg => $vg) {
+                    $arrGC[] = array(
+                        'id' => $vg['courseID'],
+                        'name' => $vg['coursecode'] . ":" . $vg['coursename'],
+                        'period' => Thaidate::date($vg['startdate'], 'DD MM YYYY') . " - " . Thaidate::date($vg['enddate'], 'DD MM YYYY'),
+                        'register_date' => Thaidate::date($vg['registstartdate'], 'DD MM YYYY') . " - " . Thaidate::date($vg['registenddate'], 'DD MM YYYY'),
+                    );
+                }
 
-    }
-    print_r($cond_course);
-}
+                $data['group_course'] = $arrGC;
+            }
+        }
+        if (count($cond_hospital) > 0) {
+            $arrGH = array();
+            foreach ($cond_hospital as $kh => $vh) {
+                $hid = $vh[0];
+                $hname = $vh[1];
+                $paid = 0;
+                $register = 0;
+
+                $res_group_course = $this->user_m->getCountGroupRegisterByHospitalID($courseID, $hid);
+//                    var_dump($res_group_course, $courseID, $hid);
+                if (count($res_group_course) > 0) {
+                    foreach ($res_group_course as $kpay => $vpay) {
+                        if ($vpay['IsPaid'] == 1) {
+                            $paid = $vpay['total'];
+                        }
+                        $register += $vpay['total'];
+                    }
+                }
+                $remain = intval($max_register) - intval($register);
+                array_push($arrGH, array(
+                    'name' => $hname,
+                    'register' => $register,
+                    'paid' => $paid,
+                    'remain' => $remain
+                ));
+            }
+            $data['group_hospital'] = $arrGH;
+//                var_dump($arrGH);
+        }
+
 
 
         $this->template->add_js('js_validate/jquery.js');
@@ -930,7 +972,7 @@ if($coursetypeID==3){
         $courseTypeID = $resCourse[0]['coursetypeID'];
         $cond_maximize = 0;
         $cond_position = null;
-        if($courseTypeID==3){
+        if ($courseTypeID == 3) {
             $course_cond = $resCourse[0]['group_condition'];
             $arr_group_cond = json_decode($course_cond, true);
             $cond_position = $arr_group_cond['group_course_cond']['position'];
@@ -945,10 +987,9 @@ if($coursetypeID==3){
         $data['data'] = $res[0];
         $data['food'] = $food;
         $data['prefix'] = $this->user_m->getPrefixName();
-        if($cond_position!=null){
+        if ($cond_position != null) {
             $data['occupation'] = $this->user_m->getOccupationByID($cond_position);
-        }
-        else{
+        } else {
             $data['occupation'] = $this->user_m->getOccupation();
         }
         $data['position'] = $this->user_m->getPosition();

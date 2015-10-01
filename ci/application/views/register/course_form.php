@@ -205,7 +205,7 @@
                         <tr>
                             <td>
 
-                                <input type="text" name="cond_total" id="cond_total" maxlength="4" size="5"
+                                <input type="text" name="cond_total" id="cond_total" maxlength="4" size="5" value="0"
                                        style="text-align: right">
                                 <label for="cond_total"> คน</label>
                             </td>
@@ -217,12 +217,17 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>
+                                <div id="view-hospital"></div>
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="padding-top: 10px">
                                 <a class="inline" href="#data-con">
                     <span style="background-color: #888888;padding: 5px 10px;" >
                                     กดเลือกกลุ่มของหลักสูตร</span>
                                 </a>
-                                <input type="text" id="cond_course" name="cond_course" value="">
+                                <input type="hidden" id="cond_course" name="cond_course" value="">
                             </td>
                         </tr>
                     </table>

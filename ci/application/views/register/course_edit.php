@@ -238,8 +238,13 @@
                         <tr>
                             <td>
                                 <div id="fileuploader">Upload</div>
-                                <input type="text" name="cond_hospital" id="cond_hospital"
+                                <input type="hidden" name="cond_hospital" id="cond_hospital"
                                        value='<?= $group_hospital ?>'>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="view-hospital"></div>
                             </td>
                         </tr>
                         <tr>
@@ -248,7 +253,7 @@
                     <span style="background-color: #888888;padding: 5px 10px;">
                                     กดเลือกกลุ่มของหลักสูตร</span>
                                 </a>
-                                <input type="text" id="cond_course" name="cond_course" value="<?= $group_course ?>">
+                                <input type="hidden" id="cond_course" name="cond_course" value="<?= $group_course ?>">
                             </td>
                         </tr>
                     </table>

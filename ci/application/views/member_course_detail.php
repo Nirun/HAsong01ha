@@ -92,13 +92,59 @@
 <br> 
 
 <div id="subheader">เนื้อหา</div>
- <?php echo $data['content']; ?>
         <?php
-//        var_dump($data); exit;
-        if($data['coursetypeID']==3){
-            echo 'xxx 333';
+        echo $data['content'];
+
+        if ($group_course != null) {
+            foreach ($group_course as $kg => $vg) {
+                ?>
+                <div style="text-align: left;color: #000;padding: 5px 0px">
+                    <span style="color:red"><?= $vg['name'] ?></span>
+                    <br>
+                   วันที่อบรม: <?= $vg['period'] ?> <br>
+                   ลงทะเบียนได้ตั้งแต่วันที่ <br>
+                    <?= $vg['period'] ?>
+                    <div class="butt"><a href="<?php echo setting::$BASE_URL.'/member/course_detail/'.$vg['id']?>"  class="more2">ดูรายละเอียด และลงทะเบียน</a></div>
+                </div>
+
+
+
+
+                <?php
+
+            }
         }
         ?>
+        <?php
+        if ($group_hospital != null) {
+            ?>
+            <table border="1" cellpadding="2" cellspacing="0">
+                <tr >
+                    <td>ชื่อ รพ.</td>
+                    <td>ลงทะเบียนแล้ว</td>
+                    <td>จ่ายเงินแล้ว</td>
+                    <td>จำนวนเหลือ</td>
+                </tr>
+                <?php
+                foreach ($group_hospital as $kp => $vp) {
+                    ?>
+
+                    <tr style="border-bottom: none;">
+                        <td  style="border-bottom: none;"><?=$vp['name']?></td>
+                        <td  style="border-bottom: none;"><?=$vp['register']?></td>
+                        <td  style="border-bottom: none;"><?=$vp['paid']?></td>
+                        <td  style="border-bottom: none;"><?=$vp['remain']?></td>
+                    </tr>
+
+                    <?php
+
+                }
+                ?>
+            </table>
+            <?php
+        }
+        ?>
+
 
 <br> 
 <br> 

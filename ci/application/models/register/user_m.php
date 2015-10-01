@@ -19,15 +19,17 @@ class User_m extends CI_Model
 
     function getOccupation()
     {
-                return $this->db->get('tbl_occupation')->result_array();
+        return $this->db->get('tbl_occupation')->result_array();
     }
+
     function getOccupationByID($id)
     {
         $this->db->select('*');
         $this->db->from('tbl_occupation');
-        $this->db->where_in('id',$id);
+        $this->db->where_in('id', $id);
         return $this->db->get()->result_array();
     }
+
     function getPrefixName()
     {
         return $this->db->get('tbl_prefix_name')->result_array();
@@ -1330,5 +1332,16 @@ group by b.hospitalID,a.courseID";
         return $res;
     }
 
+    function getCountGroupRegisterByHospitalID($courseID, $hospitalID)
+    {
+        $sql = "SELECT count(a.IsPaid) total ,a.IsPaid
+FROM tbl_registration a
+left join tbl_trainees b on b.traineeID = a.traineeID
+where a.courseID = {$courseID} and a.refType = 0 and b.hospitalID = {$hospitalID}
+group by a.IsPaid";
+        $db = $this->db->query($sql);
+        $res = $db->result_array();
+        return $res;
+    }
 
 }
