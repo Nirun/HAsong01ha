@@ -3,9 +3,11 @@
  */
 $(function () {
     var ret = false;
-    function callBack(ok){
+
+    function callBack(ok) {
         ret = ok;
     }
+
     $('#reserve_2').on('click', function () {
         if ($(this).attr('rev') == 3) {
             $.ajax({
@@ -14,13 +16,14 @@ $(function () {
                     data: {courseID: $(this).attr('rel')},
                     cache: false,
                     dataType: "json",
-                    async:false,
-                    success: function (data) {
-                        if (data.response) {
+                    async: false,
+                    success: function (res) {
+                        //console.log(res);
+                        if (res.response) {
                             callBack(true)
                         }
                         else {
-                            alert(data.msg);
+                            alert(res.msg);
                             callBack(false)
                         }
                     }

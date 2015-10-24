@@ -781,37 +781,37 @@ class User extends CI_Controller
 
                 $data['group_course'] = $arrGC;
             }
-        }
-        if (count($cond_hospital) > 0) {
-            $arrGH = array();
-            foreach ($cond_hospital as $kh => $vh) {
-                $hid = $vh[0];
-                $hname = $vh[1];
-                $paid = 0;
-                $register = 0;
 
-                $res_group_course = $this->user_m->getCountGroupRegisterByHospitalID($courseID, $hid);
+            if (count($cond_hospital) > 0) {
+                $arrGH = array();
+                foreach ($cond_hospital as $kh => $vh) {
+                    $hid = $vh[0];
+                    $hname = $vh[1];
+                    $paid = 0;
+                    $register = 0;
+
+                    $res_group_course = $this->user_m->getCountGroupRegisterByHospitalID($courseID, $hid);
 //                    var_dump($res_group_course, $courseID, $hid);
-                if (count($res_group_course) > 0) {
-                    foreach ($res_group_course as $kpay => $vpay) {
-                        if ($vpay['IsPaid'] == 1) {
-                            $paid = $vpay['total'];
+                    if (count($res_group_course) > 0) {
+                        foreach ($res_group_course as $kpay => $vpay) {
+                            if ($vpay['IsPaid'] == 1) {
+                                $paid = $vpay['total'];
+                            }
+                            $register += $vpay['total'];
                         }
-                        $register += $vpay['total'];
                     }
+                    $remain = intval($max_register) - intval($register);
+                    array_push($arrGH, array(
+                        'name' => $hname,
+                        'register' => $register,
+                        'paid' => $paid,
+                        'remain' => $remain
+                    ));
                 }
-                $remain = intval($max_register) - intval($register);
-                array_push($arrGH, array(
-                    'name' => $hname,
-                    'register' => $register,
-                    'paid' => $paid,
-                    'remain' => $remain
-                ));
-            }
-            $data['group_hospital'] = $arrGH;
+                $data['group_hospital'] = $arrGH;
 //                var_dump($arrGH);
+            }
         }
-
 
 
         $this->template->add_js('js_validate/jquery.js');
@@ -1220,7 +1220,7 @@ class User extends CI_Controller
         }
         $resReceipt = $this->user_m->updateReceiptInfo();
         echo 'บันทึกข้อมูลเรียบร้อย';
-        echo '<br> กด ESC หรือ x เพื่อปิด';
+        echo '<br> โปรดกด ESC หรือ x เพื่อปิด';
         exit;
     }
 
@@ -1563,7 +1563,6 @@ class User extends CI_Controller
 
     function register_group_course()
     {
-        $ret = false;
         $msg = '';
         $courseID = $this->input->post('courseID');
         $id = $this->session->userdata('traineeID');
@@ -1571,17 +1570,22 @@ class User extends CI_Controller
         $this->load->model('register/course_m', 'course_m');
         $dataCourse = $this->course_m->getCourse($courseID);
         $course_cond = $dataCourse[0]['group_condition'];
-//print_r($course_cond); exit;
+        //var_dump($dataCourse);
+
         $res = $this->user_m->get_user_profile($id);
+
         $hospitalID = $res[0]['hospitalID'];
+        $positionID = $res[0]['professiontypeID'];
+
         if ($course_cond != null) {
             $datacond = json_decode($course_cond, true);
-
+            // print_r($datacond);
         }
 
         if ($course_cond == null) {
             $msg = 'No specific hospital';
             $ret = true;
+
         } else if (count($datacond['group_course_cond']['course']) > 0) {
             $chk1 = true;
             $arrCourse = $datacond['group_course_cond']['course'];
@@ -1592,57 +1596,84 @@ class User extends CI_Controller
                     if ($hospitalID == $v1['hospitalID']) {
                         $chk1 = false;
                         $ret = false;
-                        $msg = 'you registered in group';
+                        $msg = 'ท่านได้สมัครในหลักสูตรนี้แล้ว';
                         break;
                     }
                 }
             }
-
             if ($chk1) {
-                if (count($datacond['group_course_cond']['hospital']) > 0) {
-                    $chk = false;
-                    $arrHos = $datacond['group_course_cond']['hospital'];
-                    foreach ($arrHos as $k => $v) {
-                        if ($hospitalID == $v[0]) {
-                            $chk = true;
-                            break;
-                        }
+                $chk2 = true;
+                $cond_position = $datacond['group_course_cond']['position'];
+                if (count($cond_position) > 0) {
+                    $isPosition = in_array($positionID, $cond_position);
+                    //print_r($isPosition);
+                    if ($isPosition) {
+                        $ret = true;
+                        $msg = 'position available';
+                        $chk2 = true;
+                    } else {
+                        $chk2 = false;
+                        $ret = false;
+                        $msg = 'วิชาชีพของคุณไม่อยู่ในหลักสูตร';
                     }
-                    if ($chk) {
-                        $max_register = $datacond['group_course_cond']['max_register'];
-                        if ($max_register != 0) {
-                            $dataChk = $this->user_m->getCountHospitalRegisterGroup($courseID);
-                            if (count($dataChk) > 0) {
-                                foreach ($dataChk as $k1 => $v1) {
-                                    if ($hospitalID == $v1['hospitalID']) {
-                                        if ($max_register > $v1['total']) {
-                                            $ret = true;
-                                            $msg = 'register available';
-                                        } else {
-                                            $ret = false;
-                                            $msg = 'maximum register';
+                } else {
+                    $chk2 = true;
+                    $ret = true;
+                    $msg = 'position available';
+                }
+//                echo('ch1:'.$chk1);
+
+                if ($chk2) {
+                    if (count($datacond['group_course_cond']['hospital']) > 0) {
+                        $chk = false;
+                        $arrHos = $datacond['group_course_cond']['hospital'];
+                        foreach ($arrHos as $k => $v) {
+                            if ($hospitalID == $v[0]) {
+                                $chk = true;
+                                break;
+                            }
+                        }
+//                   var_dump($chk);
+                        if ($chk) {
+                            $max_register = $datacond['group_course_cond']['max_register'];
+                            if ($max_register != 0) {
+                                $dataChk = $this->user_m->getCountHospitalRegisterGroup($courseID);
+                                if (count($dataChk) > 0) {
+                                    foreach ($dataChk as $k1 => $v1) {
+                                        if ($hospitalID == $v1['hospitalID']) {
+                                            if ($max_register > $v1['total']) {
+                                                $ret = true;
+                                                $msg = 'register available';
+                                            } else {
+                                                $ret = false;
+                                                $msg = 'ผู้สมัครเต็ม';
+                                            }
+                                            break;
                                         }
-                                        break;
                                     }
+                                } else {
+                                    $ret = true;
+                                    $msg = 'your hospital available';
                                 }
                             } else {
                                 $ret = true;
-                                $msg = 'your hospital available';
+                                $msg = 'No limit register';
                             }
+
                         } else {
-                            $ret = true;
-                            $msg = 'No limit register';
+                            $ret = false;
+                            $msg = 'รพ ของคุณไม่ได้อยู่ในฐานข้อมูลของหลักสูตรนี้';
                         }
 
                     }
                 }
             }
 
-            $raw_json = array('response' => $ret, 'msg' => $msg);
-            $json = json_encode($raw_json);
-            header('Content-Type: application/json');
-            echo $json;
-            exit;
         }
+        $raw_json = array('response' => $ret, 'msg' => $msg);
+        $json = json_encode($raw_json);
+        header('Content-Type: application/json');
+        echo $json;
+        exit;
     }
 }
