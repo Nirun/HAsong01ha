@@ -491,7 +491,7 @@ class User_m extends CI_Model
 
     function get_user_profile($id)
     {
-        $this->db->select('pf.title_th as prefix,t.prefix_other,t.name,t.lastname,t.email,d.tel,d.mobile,d.fax,o.title_th as occupation,t.professionother,p.position,t.positionother,d.address,pv.PROVINCE_NAME,d.postcode,d.soi,d.road,d.district,t.cardID,t.hospitalID,t.professiontypeID');
+        $this->db->select('pf.title_th as prefix,t.prefix_other,t.name,t.lastname,t.email,d.tel,d.mobile,d.fax,o.title_th as occupation,t.professionother,p.position,t.positionother,d.address,pv.PROVINCE_NAME,d.postcode,d.soi,d.road,d.district,t.cardID,t.hospitalID,t.professiontypeID,t.positionID');
         $this->db->from('tbl_trainees t');
         $this->db->join('tbl_address d', 'd.traineeID = t.traineeID', 'left');
         $this->db->join('tbl_prefix_name pf', 'pf.id = t.prefix', 'left');

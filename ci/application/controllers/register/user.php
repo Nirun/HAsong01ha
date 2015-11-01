@@ -1573,39 +1573,47 @@ class User extends CI_Controller
         //var_dump($dataCourse);
 
         $res = $this->user_m->get_user_profile($id);
-
+//print_r($res); exit;
         $hospitalID = $res[0]['hospitalID'];
-        $positionID = $res[0]['professiontypeID'];
+        $professiontypeID = $res[0]['professiontypeID'];
+        $positionID = $res[0]['positionID'];
 
         if ($course_cond != null) {
             $datacond = json_decode($course_cond, true);
-            // print_r($datacond);
+           // print_r($datacond);
         }
 
         if ($course_cond == null) {
             $msg = 'No specific hospital';
             $ret = true;
-
-        } else if (count($datacond['group_course_cond']['course']) > 0) {
+        } else {
+//        else if (count($datacond['group_course_cond']['course']) > 0) {
             $chk1 = true;
-            $arrCourse = $datacond['group_course_cond']['course'];
-            $Qry = implode(",", $arrCourse);
-            $dataChk = $this->user_m->getHospitalRegistered($Qry);
-            if (count($dataChk) > 0) {
-                foreach ($dataChk as $k1 => $v1) {
-                    if ($hospitalID == $v1['hospitalID']) {
-                        $chk1 = false;
-                        $ret = false;
-                        $msg = 'ท่านได้สมัครในหลักสูตรนี้แล้ว';
-                        break;
+            if (count($datacond['group_course_cond']['course']) > 0) {
+                $arrCourse = $datacond['group_course_cond']['course'];
+                $Qry = implode(",", $arrCourse);
+                $dataChk = $this->user_m->getHospitalRegistered($Qry);
+                if (count($dataChk) > 0) {
+                    foreach ($dataChk as $k1 => $v1) {
+                        if ($hospitalID == $v1['hospitalID']) {
+                            $chk1 = false;
+                            $ret = false;
+                            $msg = 'ท่านได้สมัครในหลักสูตรนี้แล้ว';
+                            break;
+                        }
                     }
                 }
+            } else {
+                $chk1 = true;
+                $ret = true;
+                $msg = '';
             }
             if ($chk1) {
                 $chk2 = true;
                 $cond_position = $datacond['group_course_cond']['position'];
+                //var_dump($cond_position,$positionID); exit;
                 if (count($cond_position) > 0) {
-                    $isPosition = in_array($positionID, $cond_position);
+                    $isPosition = in_array($professiontypeID, $cond_position);
                     //print_r($isPosition);
                     if ($isPosition) {
                         $ret = true;
@@ -1617,6 +1625,11 @@ class User extends CI_Controller
                         $msg = 'วิชาชีพของคุณไม่อยู่ในหลักสูตร';
                     }
                 } else {
+                    $chk2 = true;
+                    $ret = true;
+                    $msg = 'position available';
+                }
+                if($positionID==4){
                     $chk2 = true;
                     $ret = true;
                     $msg = 'position available';
