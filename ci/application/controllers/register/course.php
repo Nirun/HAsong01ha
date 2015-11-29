@@ -147,7 +147,7 @@ class Course extends CI_Controller
         $post = $this->input->post();
         $cond_total = intval($post['cond_total']);
         $cond_hosp = (trim($post['cond_hospital']) != '') ? trim($post['cond_hospital']) : null;
-        $cond_pos = (!isset($post['cond_position'])) ? null : $post['cond_position'];
+        $cond_pos = (!isset($post['cond_position'])) ? 0 : $post['cond_position'];
         if (trim($post['cond_course']) != '') {
             $cond_course = explode(",", $post['cond_course']);
 
@@ -155,7 +155,7 @@ class Course extends CI_Controller
                 unset($cond_course[count($cond_course) - 1]);
             }
         } else {
-            $cond_course = null;
+            $cond_course = array(0=>0);
         }
 
         $arrCon = array();
@@ -285,7 +285,7 @@ class Course extends CI_Controller
         $post = $this->input->post();
         $cond_total = intval($post['cond_total']);
         $cond_hosp = $post['cond_hospital'];
-        $cond_pos = (!isset($post['cond_position'])) ? null : $post['cond_position'];
+        $cond_pos = (!isset($post['cond_position'])) ? 0 : $post['cond_position'];
         if (trim($post['cond_course']) != '') {
             $cond_course = explode(",", $post['cond_course']);
 
@@ -293,7 +293,7 @@ class Course extends CI_Controller
                 unset($cond_course[count($cond_course) - 1]);
             }
         } else {
-            $cond_course = null;
+            $cond_course = array(0=>0);
         }
 
         $arrCon = array();
@@ -555,10 +555,24 @@ class Course extends CI_Controller
         } else {
             $data = array('upload_data' => $this->upload->data());
             $fn = $data['upload_data']['full_path'];
-            $csv = array_map('str_getcsv', file($fn));
-            unset($csv[0]);
+
+            $hdCSV = fopen($fn,'r');
+            $csv2 = array();
+            while (($rcsv = fgetcsv($hdCSV, 500, ",")) != false) {
+                $real_id = $rcsv[0];
+                if(intval($real_id)){
+                    $this->load->model('register/course_m', 'course_m');
+                    $resHosp = $this->course_m->getHospitalIdByRealId(intval($real_id));
+                   if(count($resHosp)>0){
+                       $hospid = $resHosp[0]['hospitalid'];
+                       $csv2[] = array(0=>$hospid,1=>$rcsv[1]);
+                      // print_r($id);
+                   }
+                }
+            }
+ //           unset($csv2[0]);
 //            header('Content-Type: application/json');
-            $json = json_encode($csv);
+            $json = json_encode($csv2);
             echo $json;
             exit;
 

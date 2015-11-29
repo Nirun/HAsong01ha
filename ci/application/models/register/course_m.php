@@ -1260,5 +1260,13 @@ class Course_m extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+    function getHospitalIdByRealId($id){
+        $this->db->select('hospitalid');
+        $this->db->from('hospital');
+        $this->db->where('real_hospital_id', $id);
+        $this->db->where('real_hospital_id IS NOT NULL');
+        $query = $this->db->get()->result_array();
+        return $query;
+    }
 }
 
