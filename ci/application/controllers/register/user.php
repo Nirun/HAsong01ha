@@ -1261,6 +1261,7 @@ class User extends CI_Controller
         // get Temp ID
 //        $tmp = $this->user_m->getTmpId();
 //        $tmpID = $tmp[0]['id'];
+        /*
         $regDate = date('Y-m-d');
         $separateRegDate = explode("-", $regDate);
         $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
@@ -1271,6 +1272,22 @@ class User extends CI_Controller
         } else {
             $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate . ' 00:00:00', "DD MM YYYY");
         }
+        */
+
+        $regDate = date('Y-m-d');
+        $separateRegDate = explode("-", $regDate);
+        $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
+        $regDate = $regDate.' 00:00:00';
+        $nowDate = date('Y-m-d');
+        $txt_end_pay = "กรุณาชำระเงินภายใน  15 วัน";
+
+
+        if(strtotime($regDate) >= strtotime($data['payenddate']) ){
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
+        }else{
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate, "DD MM YYYY");
+        }
+
 
         $ref_no = intval($this->user_m->getRefNo($data['courseID'])) + 1; // SET NEW REF_ID
         $data['ref2'] = substr($data['coursecode'], 2, 3) . substr($data['generation'], 0, 1) . str_pad($ref_no, 4, '0', STR_PAD_LEFT);
@@ -1355,13 +1372,24 @@ class User extends CI_Controller
         $regDate = date('Y-m-d', strtotime($data['registerdatetime']));
         $separateRegDate = explode("-", $regDate);
         $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
+        $regDate = $regDate.' 00:00:00';
         $nowDate = date('Y-m-d');
         $txt_end_pay = "กรุณาชำระเงินภายใน  15 วัน";
+
+        //var_dump($regDate,$data['payenddate']);
+        /*
         if (strtotime($regDate) <= strtotime($nowDate)) {
             $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
         } else {
             $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate . ' 00:00:00', "DD MM YYYY");
         }
+        */
+        if(strtotime($regDate) >= strtotime($data['payenddate']) ){
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
+        }else{
+            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate, "DD MM YYYY");
+        }
+
         $content = file_get_contents('template_email/bill.html');
         $content = str_replace('<!--date-->', date('d/m/Y'), $content);
         $content = str_replace('<!--txt_end_pay-->', $txt_end_pay, $content);
