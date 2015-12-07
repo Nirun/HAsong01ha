@@ -285,4 +285,20 @@ class util
         self::$_CI->load->model('register/user_m', 'user_m');
         return self::$_CI->user_m->getRegisterInfo($RegID);
     }
+    public static function prefixAddr($val,$pref)
+    {
+        $txt = "";
+        $arr = array(
+            'soi' => "ซ. ",
+            'rd' => "ถ. ",
+            'district' => "เขต ",
+            'sub' => "แขวง ",
+            'province' => "จ. "
+
+        );
+        if (trim($val) != '') {
+            $txt = $arr[$pref] . $val;
+        }
+        return $txt;
+    }
 }

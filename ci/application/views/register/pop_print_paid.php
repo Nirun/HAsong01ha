@@ -65,10 +65,10 @@ header("Expires: 0");
                 <td align="left"><?php echo $val2['registerype']; ?></td>
                 <td align="left"><?php echo $val2['receiptname']; ?></td>
                 <td align="left"><?php echo $val2['receiptaddress']; ?></td>
-                <td align="left"><?php echo $val2['soi']; ?></td>
-                <td align="left"><?php echo $val2['road']; ?></td>
-                <td align="left"><?php echo $val2['district']; ?></td>
-                <td align="left"><?php echo $val2['province']; ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['soi'],'soi'); ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['road'],'rd'); ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['district'],'district'); ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['province'],'province'); ?></td>
                 <td align="left"><?php echo $val2['postcode']; ?></td>
                 <td align="left"><?php echo "'".$val2['Ref1']; ?></td>
                 <td align="left"><?php echo "'".$val2['Ref2']; ?></td>

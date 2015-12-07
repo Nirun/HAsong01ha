@@ -213,17 +213,17 @@ margin-top:2px; margin-bottom:2px;">
                 <td align="left"><?php echo $val2['registerype']; ?></td>
                 <td align="left"><?php echo $val2['receiptname']; ?></td>
                 <td align="left"><?php echo $val2['receiptaddress']; ?></td>
-                <td align="left"><?php echo $val2['soi']; ?></td>
-                <td align="left"><?php echo $val2['road']; ?></td>
-                <td align="left"><?php echo $val2['district']; ?></td>
-                <td align="left"><?php echo $val2['province']; ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['soi'],'soi'); ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['road'],'rd'); ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['district'],'district'); ?></td>
+                <td align="left"><?php echo util::prefixAddr($val2['province'],'province'); ?></td>
                 <td align="left"><?php echo $val2['postcode']; ?></td>
                 <td align="left"><?php echo $val2['Ref1']; ?></td>
                 <td align="left"><?php echo $val2['Ref2']; ?></td>
                 <td align="left"><?php echo Thaidate::date($val2['receiptdate'], 'DD MM YYYY'); ?></td>
                 <td align="right"><?php echo $val2['price']; ?></td>
                 <td align="center">
-                    <?php echo $val2['seatNo']; ?>
+                    <?php echo $val2['seatNo'];?>
                 </td>
             </tr>
 
