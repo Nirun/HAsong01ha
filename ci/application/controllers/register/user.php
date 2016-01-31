@@ -506,7 +506,9 @@ class User extends CI_Controller
         $this->load->model('register/user_m', 'user_m');
         $this->load->model('register/hospital_m', 'hospital_m');
         $this->load->model('register/course_m', 'course_m');
-        $res = $this->user_m->get_user($id);
+        // $res = $this->user_m->get_user($id);
+            $res = $this->user_m->get_user_profile($id);
+        //print_r($res);
         //$course = $this->course_m->getCoursesByMonth($mounth);
         $course = $this->course_m->getRegisterCoursesByMonth($mounth);
         if (count($res) !== 1) {
@@ -519,6 +521,7 @@ class User extends CI_Controller
         //var_dump($list_course);
         //var_dump($list_course); exit;
         $data['course'] = $course;
+        $data['data_member'] = $res[0];
         $this->template->set_template('member');
         $this->template->add_js('js_validate/jquery.js');
         $this->template->add_js('js/lib/jquery.mousewheel-3.0.6.pack.js');
@@ -1261,7 +1264,6 @@ class User extends CI_Controller
         // get Temp ID
 //        $tmp = $this->user_m->getTmpId();
 //        $tmpID = $tmp[0]['id'];
-        /*
         $regDate = date('Y-m-d');
         $separateRegDate = explode("-", $regDate);
         $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
@@ -1272,22 +1274,6 @@ class User extends CI_Controller
         } else {
             $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate . ' 00:00:00', "DD MM YYYY");
         }
-        */
-
-        $regDate = date('Y-m-d');
-        $separateRegDate = explode("-", $regDate);
-        $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
-        $regDate = $regDate.' 00:00:00';
-        $nowDate = date('Y-m-d');
-        $txt_end_pay = "กรุณาชำระเงินภายใน  15 วัน";
-
-
-        if(strtotime($regDate) >= strtotime($data['payenddate']) ){
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
-        }else{
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate, "DD MM YYYY");
-        }
-
 
         $ref_no = intval($this->user_m->getRefNo($data['courseID'])) + 1; // SET NEW REF_ID
         $data['ref2'] = substr($data['coursecode'], 2, 3) . substr($data['generation'], 0, 1) . str_pad($ref_no, 4, '0', STR_PAD_LEFT);
@@ -1314,9 +1300,9 @@ class User extends CI_Controller
 
         $resCourse = $this->course_m->getCourse($data['courseID']); //TODO SET COMPANY CODE
         $courseType = $resCourse[0]['coursetypeID'];
-        $companycode = '90122';
+        $companycode = '92122';
         if ($courseType == 2) {
-            $companycode = '90122';
+            $companycode = '92122';
         } else {
             $companycode = '9968';
         }
@@ -1372,24 +1358,13 @@ class User extends CI_Controller
         $regDate = date('Y-m-d', strtotime($data['registerdatetime']));
         $separateRegDate = explode("-", $regDate);
         $regDate = date('Y-m-d', strtotime($regDate . " +15 days"));
-        $regDate = $regDate.' 00:00:00';
         $nowDate = date('Y-m-d');
         $txt_end_pay = "กรุณาชำระเงินภายใน  15 วัน";
-
-        //var_dump($regDate,$data['payenddate']);
-        /*
         if (strtotime($regDate) <= strtotime($nowDate)) {
             $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
         } else {
             $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate . ' 00:00:00', "DD MM YYYY");
         }
-        */
-        if(strtotime($regDate) >= strtotime($data['payenddate']) ){
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($data["payenddate"], "DD MM YYYY");
-        }else{
-            $txt_end_pay = "วันสุดท้ายในการชำระเงิน " . Thaidate::date($regDate, "DD MM YYYY");
-        }
-
         $content = file_get_contents('template_email/bill.html');
         $content = str_replace('<!--date-->', date('d/m/Y'), $content);
         $content = str_replace('<!--txt_end_pay-->', $txt_end_pay, $content);
@@ -1413,9 +1388,9 @@ class User extends CI_Controller
 
         $resCourse = $this->course_m->getCourse($data['courseID']); //TODO SET COMPANY CODE
         $courseType = $resCourse[0]['coursetypeID'];
-        $companycode = '90122';
+        $companycode = '92122';
         if ($courseType == 2) {
-            $companycode = '90122';
+            $companycode = '92122';
         } else {
             $companycode = '9968';
         }
